@@ -2,4 +2,8 @@
 - host: localhost
 
   task: 
-    - name: install r-base
+    - name: install all packages needed
+      apt:
+        pkg:
+        - r-base=4.1.0
+        - 
