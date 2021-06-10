@@ -1,0 +1,5 @@
+---
+- host: localhost
+
+  task: 
+    - name: install r-base
