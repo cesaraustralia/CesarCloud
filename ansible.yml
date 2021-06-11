@@ -1,9 +1,16 @@
 ---
-- host: localhost
+- hosts: all
 
-  task: 
-    - name: install all packages needed
-      apt:
-        pkg:
-        - r-base=4.1.0
-        - 
+  tasks:
+    - name: Install R
+      become: yes
+      include: tasks/install-r.yml
+    - name: Install R packages
+      become: yes
+      include: tasks/install-packages.yml
+    # - name: Install RStudio server
+      # include: tasks/install-rstudio-server.yml
+    # - name: Clone R scripts
+     #  ansible.builtin.git:
+      #  repo: https://github.com/cesaraustralia/GeneticRiskIndex
+      #  dest: ~/GeneticRiskIndex
