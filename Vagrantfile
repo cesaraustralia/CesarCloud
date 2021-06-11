@@ -8,12 +8,12 @@ Vagrant.configure(2) do |config|
 
   # Julia will need some RAM
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = "2048"
+    vb.memory = "4096"
     vb.cpus = 2
   end
 
   config.vm.provision "ansible" do |ansible|
     ansible.verbose = "v"
-    ansible.playbook = "r.yml"
+    ansible.playbook = "ansible.yml"
   end
 end
