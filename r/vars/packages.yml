@@ -7,8 +7,10 @@ cran_packages:
   - rgeos
   - sf
   - terra
+  - tmap
   - tidyverse
   - data.table
+  - lubridate
   - plotly
   - maptools
   - leaflet
@@ -17,8 +19,9 @@ cran_packages:
   - reshape2
   - ggmap
   - dbplyr
-  -
-
+  - doParallel
+  - rvest
+  - cowplot
 
 shared_libraries:
   - libcurl4-gnutls-dev
