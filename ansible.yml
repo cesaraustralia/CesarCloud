@@ -1,5 +1,7 @@
 ---
-- hosts: all
+- name: deploy_server
+  hosts: all
+  become: true
 
   tasks:
     - name: Install R
