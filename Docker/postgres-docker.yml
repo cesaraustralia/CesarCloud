@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  mypostgis:
+    image: postgis/postgis
+    prots:
+      - 5432:5432
+    environment:
+     - POSTGRES_PASSWORD=cesarau
+     - POSTGRES_USER=admin
+     - POSTGRES_DB=postgres
+  myshiny:
+    image: rocker/shiny-server
+    ports:
+     - 3838:3838
+    volume:
+     - /srv/shiny-server:/srv/shiny-server
+     - /var/log/shiny-server:/var/log/shiny-server
