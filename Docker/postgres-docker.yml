@@ -9,7 +9,7 @@ services:
      - POSTGRES_USER=admin
      - POSTGRES_DB=postgres
   myshiny:
-    image: rocker/shiny:latest
+    image: shiny-spatial:1.0
     ports:
      - 3838:3838
     volumes:
