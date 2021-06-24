@@ -55,6 +55,7 @@ RUN Rscript -e 'install.packages(c("shiny","shinydashboard","shinythemes"))'
 RUN Rscript -e 'install.packages(c("tidyverse","data.table","viridis","lubridate","plotly","DT","reshape2","ggmap","dbplyr","doParallel","rvest","cowplot"))'
 RUN Rscript -e 'install.packages(c("rgdal","rgeos","sf","terra","tmap","maptools","leaflet"))'
 
+
 # expose port
 EXPOSE 3838
 
