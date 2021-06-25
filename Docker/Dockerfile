@@ -9,7 +9,6 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
     libxml2-dev \
     libcairo2-dev \
     libsqlite3-dev \
-    # dependency
     libmysqlclient-dev \
 #    libmariadb-dev \
 #    libmariadbd-dev \
@@ -26,11 +25,9 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
     libjpeg-dev \
     libicu-dev \
     libproj-dev \ 
-    libudunits2-dev
+    libudunits2-dev \
+    git
 # libcurl4-gnutls-dev
-
-# install git
-RUN apt-get install git -y
 
 ## update system libraries
 RUN apt-get update && \
@@ -56,4 +53,4 @@ RUN Rscript -e 'install.packages(c("rgdal","rgeos","sf","terra","tmap","maptools
 EXPOSE 3838
 
 # run app on container start
-CMD ["R", "-e", "shiny::runApp('/srv/shiny-server', host = '0.0.0.0', port = 3838)"]
+#CMD ["R", "-e", "shiny::runApp('/srv/shiny-server', host = '0.0.0.0', port = 3838)"]

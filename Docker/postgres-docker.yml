@@ -8,10 +8,19 @@ services:
      - POSTGRES_PASSWORD=cesarau
      - POSTGRES_USER=admin
      - POSTGRES_DB=postgres
+    volumes:
+     - postgres-data:/var/lib/postgresql/data
   myshiny:
     image: shiny-spatial:1.0
     ports:
      - 3838:3838
     volumes:
-     - /srv/shiny-server:/srv/shiny-server
-     - /var/log/shiny-server:/var/log/shiny-server
+     - shiny-apps:/srv/shiny-server
+     - shiny-logs:/var/log/shiny-server
+volumes:
+  postgre-data:
+    driver: local
+  shiny-apps:
+    driver: local
+  shiny-logs:
+    driver: local
