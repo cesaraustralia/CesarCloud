@@ -29,16 +29,13 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
     libudunits2-dev
 # libcurl4-gnutls-dev
 
+# install git
+RUN apt-get install git -y
 
 ## update system libraries
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get clean
-
-
-# clone shiny apps from github
-#RUN mkdir -p /srv/shiny-server
-#RUN git clone git@github.com:cesaraustralia/daragrub.git /srv/shiny-server/daragrub
 
 # copy necessary files
 ## app folder
@@ -55,9 +52,8 @@ RUN Rscript -e 'install.packages(c("shiny","shinydashboard","shinythemes"))'
 RUN Rscript -e 'install.packages(c("tidyverse","data.table","viridis","lubridate","plotly","DT","reshape2","ggmap","dbplyr","doParallel","rvest","cowplot"))'
 RUN Rscript -e 'install.packages(c("rgdal","rgeos","sf","terra","tmap","maptools","leaflet"))'
 
-
 # expose port
 EXPOSE 3838
 
 # run app on container start
-#CMD ["R", "-e", "shiny::runApp('/srv/shiny-server', host = '0.0.0.0', port = 3838)"]
+CMD ["R", "-e", "shiny::runApp('/srv/shiny-server', host = '0.0.0.0', port = 3838)"]
