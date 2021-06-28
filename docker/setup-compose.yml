@@ -1,0 +1,28 @@
+version: "3.3"
+services:
+  mypostgis:
+    image: postgis/postgis
+    ports:
+      - 5432:5432
+    environment:
+     - POSTGRES_PASSWORD=cesarau
+     - POSTGRES_USER=admin
+     - POSTGRES_DB=postgres
+    volumes:
+     - /var/lib/postgresql/data:/var/lib/postgresql/data
+  myshiny:
+    image: shiny-spatial:1.0
+    ports:
+     - 3838:3838
+    volumes:
+     - /srv/shiny-server:/srv/shiny-server
+     - /var/log/shiny-server:/var/log/shiny-server
+## adding volumes at the end will create them in 
+## the docker directory: /var/lib/docker/volumes 
+# volumes:
+#   postgres-data:
+#     driver: local
+#   shiny-apps:
+#     driver: local
+#   shiny-logs:
+#     driver: local
