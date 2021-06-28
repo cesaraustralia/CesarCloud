@@ -49,4 +49,3 @@ EXPOSE 3838
 
 # run app on container start
 #CMD ["R", "-e", "shiny::runApp('/srv/shiny-server', host = '0.0.0.0', port = 3838)"]
-CMD ["bin/bash"]
