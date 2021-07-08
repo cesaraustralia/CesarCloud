@@ -11,7 +11,7 @@ terraform {
 # region code for Sydney Australia
 provider "aws" {
   region = "ap-southeast-2"
-
+  
 }
 
 # create a VPC for cesar development
@@ -57,7 +57,6 @@ resource "aws_route_table" "route_table" {
 resource "aws_subnet" "subnet" {
   vpc_id     = aws_vpc.vpc.id
   cidr_block = "10.0.1.0/24"
-  # availability_zone = aws_instance.ec2.availability_zone
   availability_zone = "ap-southeast-2a"
 
   tags = {
@@ -94,6 +93,7 @@ resource "aws_security_group" "security" {
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+    # cidr_blocks = ["1.136.104.172","141.168.90.188"]
   }
 
   ingress {
@@ -141,14 +141,11 @@ resource "aws_eip" "one" {
   depends_on                = [aws_internet_gateway.gw]
 }
 
+
+# print out the public ip of the server
 output "server_public_ip" {
   value = aws_eip.one.public_ip
-}
 
-
-output "server_pbulic_ip" {
-  value = aws_eip.one.public_ip
-  
 }
 
 # add a Ubuntu 20.4 instance on a EC2
@@ -172,6 +169,26 @@ resource "aws_instance" "ec2" {
 
               sudo mkdir -p /srv/shiny-server
               git clone https://github.com/cesaraustralia/daragrub.git /srv/shiny-server/daragrub
+
+              # installing docker in the instance
+              sudo apt-get install \
+                apt-transport-https \
+                ca-certificates \
+                curl \
+                gnupg \
+                lsb-release
+              
+              curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+              echo \
+                "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+                $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+              
+              sudo apt update -y
+              sudo apt install docker-ce docker-ce-cli containerd.io -y
+              sudo apt install docker.io -y
+
+              # sudo docker run rocker/shiny:latest
 
               EOF
 
