@@ -1,9 +1,17 @@
+# create a VPC for cesar development
+resource "aws_vpc" "vpc" {
+  cidr_block = "10.0.0.0/16"
+  enable_dns_hostnames = true
+  enable_dns_support = true
+
+  tags = {
+    Name = "cesar-server"
+  }
+}
+
+# internet gate way
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.vpc.id
-
-  # tags = {
-  #   Name = "cesar-server"
-  # }
 }
 
 
@@ -15,7 +23,7 @@ resource "aws_route_table" "route_table" {
     gateway_id = aws_internet_gateway.gw.id
   }
 
-   route {
+  route {
     ipv6_cidr_block = "::/0"
     gateway_id      = aws_internet_gateway.gw.id
   }
@@ -100,17 +108,16 @@ resource "aws_security_group" "security" {
 }
 
 
-# Create a network interface with an ip in the subnet that was created in step 4
+# create a network interface with an ip in the subnet that was created in step 4
 resource "aws_network_interface" "net_interface" {
   subnet_id       = aws_subnet.subnet.id
   private_ips     = ["10.0.1.50"]
   security_groups = [aws_security_group.security.id]
-
 }
 
 
-# Assign an elastic IP to the network interface created in step 7
-resource "aws_eip" "one" {
+# assign an elastic IP to the network interface created in step 7
+resource "aws_eip" "elastic_ip" {
   vpc                       = true
   network_interface         = aws_network_interface.net_interface.id
   associate_with_private_ip = "10.0.1.50"
@@ -120,6 +127,5 @@ resource "aws_eip" "one" {
 
 # print out the public ip of the server
 output "server_public_ip" {
-  value = aws_eip.one.public_ip
-
+  value = aws_eip.elastic_ip.public_ip
 }
