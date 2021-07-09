@@ -108,7 +108,7 @@ resource "aws_security_group" "security" {
 }
 
 
-# create a network interface with an ip in the subnet that was created in step 4
+# create a network interface with an ip in the subnet
 resource "aws_network_interface" "net_interface" {
   subnet_id       = aws_subnet.subnet.id
   private_ips     = ["10.0.1.50"]
@@ -116,16 +116,25 @@ resource "aws_network_interface" "net_interface" {
 }
 
 
-# assign an elastic IP to the network interface created in step 7
-resource "aws_eip" "elastic_ip" {
+# assign an elastic IP to the network interface
+resource "aws_eip" "eip" {
   vpc                       = true
   network_interface         = aws_network_interface.net_interface.id
   associate_with_private_ip = "10.0.1.50"
-  depends_on                = [aws_internet_gateway.gw]
+  depends_on                = [aws_internet_gateway.gw, aws_instance.ec2]
 }
 
 
+# associate elastic public addrass
+# keep the same public ipv4 address for this instance
+resource "aws_eip_association" "eip_assoc" {
+  # instance_id   = aws_instance.ec2.id
+  allocation_id = aws_eip.eip.id
+  network_interface_id = aws_network_interface.net_interface.id
+  allow_reassociation = true
+}
+
 # print out the public ip of the server
 output "server_public_ip" {
-  value = aws_eip.elastic_ip.public_ip
+  value = aws_eip.eip.public_ip
 }

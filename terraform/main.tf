@@ -13,17 +13,6 @@ provider "aws" {
   region = "ap-southeast-2"  
 }
 
-# create a VPC for cesar development
-resource "aws_vpc" "vpc" {
-  cidr_block = "10.0.0.0/16"
-  enable_dns_hostnames = true
-  enable_dns_support = true
-
-  tags = {
-    Name = "cesar-server"
-  }
-}
-
 
 # add a Ubuntu 20.4 instance on a EC2
 # t2.medium for the main server
@@ -85,5 +74,5 @@ resource "aws_instance" "ec2" {
 #           + volume_id             = (known after apply)
 #           + volume_size           = (known after apply)
 #           + volume_type           = (known after apply)
-#         }
+#  }
 
