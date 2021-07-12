@@ -10,22 +10,24 @@ terraform {
 # configure the AWS Provider
 # region code for Sydney Australia
 provider "aws" {
-  region = "ap-southeast-2"  
+  region = "ap-southeast-2"
 }
 
 
 # add a Ubuntu 20.4 instance on a EC2
 # t2.medium for the main server
 resource "aws_instance" "ec2" {
-  ami           = "ami-0567f647e75c7bc05"
-  instance_type = "t2.micro"
+  ami               = "ami-0567f647e75c7bc05"
+  instance_type     = "t2.micro"
   availability_zone = "ap-southeast-2a"
-  key_name = "cesar-main-key"
+  key_name          = "cesar-main-key"
 
   network_interface {
-    device_index = 0
-    network_interface_id = aws_network_interface.net_interface.id    
+    device_index         = 0
+    network_interface_id = aws_network_interface.net_interface.id
   }
+
+  # allocation_id = aws_eip.eip.id
 
   user_data = <<-EOF
               #!/bin/bash

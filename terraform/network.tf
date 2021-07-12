@@ -1,8 +1,8 @@
 # create a VPC for cesar development
 resource "aws_vpc" "vpc" {
-  cidr_block = "10.0.0.0/16"
+  cidr_block           = "10.0.0.0/16"
   enable_dns_hostnames = true
-  enable_dns_support = true
+  enable_dns_support   = true
 
   tags = {
     Name = "cesar-server"
@@ -37,8 +37,8 @@ resource "aws_route_table" "route_table" {
 # create a subnet for the sever
 # managing IPs and networking 
 resource "aws_subnet" "subnet" {
-  vpc_id     = aws_vpc.vpc.id
-  cidr_block = "10.0.1.0/24"
+  vpc_id            = aws_vpc.vpc.id
+  cidr_block        = "10.0.1.0/24"
   availability_zone = "ap-southeast-2a"
 
   tags = {
@@ -115,26 +115,42 @@ resource "aws_network_interface" "net_interface" {
   security_groups = [aws_security_group.security.id]
 }
 
-
 # assign an elastic IP to the network interface
-resource "aws_eip" "eip" {
-  vpc                       = true
-  network_interface         = aws_network_interface.net_interface.id
-  associate_with_private_ip = "10.0.1.50"
-  depends_on                = [aws_internet_gateway.gw, aws_instance.ec2]
-}
+# resource "aws_eip" "eip" {
+#   vpc                       = true
+#   network_interface         = aws_network_interface.net_interface.id
+#   associate_with_private_ip = "10.0.1.50"
+#   depends_on                = [aws_internet_gateway.gw, aws_instance.ec2]
+# }
 
+# # associate elastic public addrass
+# # keep the same public ipv4 address for this instance
+# resource "aws_eip_association" "eip_assoc" {
+#   # instance_id   = aws_instance.ec2.id
+#   allocation_id        = aws_eip.eip.id
+#   network_interface_id = aws_network_interface.net_interface.id
+#   allow_reassociation  = true
+# }
+
+
+
+data "aws_eip" "eip" {
+  # id = "eipalloc-0aae8cdeab4e32fd3"
+  public_ip = "54.66.2.40"
+  # vpc = true
+  # network_interface = aws_network_interface.network_interface.id
+  # association_id = aws_instance.ec2.id
+}
 
 # associate elastic public addrass
-# keep the same public ipv4 address for this instance
 resource "aws_eip_association" "eip_assoc" {
-  # instance_id   = aws_instance.ec2.id
-  allocation_id = aws_eip.eip.id
+  allocation_id = data.aws_eip.eip.id
   network_interface_id = aws_network_interface.net_interface.id
-  allow_reassociation = true
+  allow_reassociation  = true
 }
 
-# print out the public ip of the server
-output "server_public_ip" {
-  value = aws_eip.eip.public_ip
-}
+# # print out the public ip of the server
+# output "server_public_ip" {
+#   description = "The instance public ip address"
+#   value = aws_eip.eip.public_ip
+# }
