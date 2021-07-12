@@ -18,6 +18,7 @@ resource "null_resource" "local_geoshiny_build" {
   depends_on = [aws_ecr_repository.geoshiny]
   provisioner "local-exec" {
     command = <<EOF
+      #!/bin/bash
       #cd ../docker
       cd ~/Public
       #$(aws ecr get-login --registry-ids 851347699251 --no-include-email)
