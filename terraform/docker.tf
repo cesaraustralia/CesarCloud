@@ -1,23 +1,58 @@
 # AWS docker image repository
-resource "aws_ecr_repository" "sp_shiny" {
+resource "aws_ecr_repository" "geoshiny" {
   name                 = "shiny-spatial"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
-    scan_on_push = true
+    scan_on_push = false
   }
 }
 
-# # build an image locally
-# resource "null_resource" "local_r_docker_build" {
-#   depends_on = [aws_ecr_repository.r_docker]
-#   provisioner "local-exec" {
-#     command = <<EOF
-#       cd ../docker/R
-#       $(aws ecr get-login --registry-ids 364518226878  --no-include-email)
-#       docker build -t ${var.project}-r .
-#       docker tag ${var.project}-r:latest ${aws_ecr_repository.r_docker.repository_url}:latest
-#       docker push ${aws_ecr_repository.r_docker.repository_url}
-#     EOF
-#   }
+output "ecr_ulr" {
+  description = "The ECR URL"
+  value = aws_ecr_repository.geoshiny.repository_url
+}
+
+# build an image locally
+resource "null_resource" "local_geoshiny_build" {
+  depends_on = [aws_ecr_repository.geoshiny]
+  provisioner "local-exec" {
+    command = <<EOF
+      #cd ../docker
+      cd ~/Public
+      $(aws ecr get-login --registry-ids 851347699251 --no-include-email)
+      docker build -t shiny-spatial .
+      docker tag shiny-spatial:latest aws_ecr_repository.geoshiny.repository_url:latest
+      docker push aws_ecr_repository.geoshiny.repository_url
+    EOF
+  }
+}
+
+
+
+
+
+# provider "docker" {
+#   source = "kreuzwerker/docker"
 # }
+
+# # build the docker image locally
+# resource "docker_image" "geoshiny_build" {
+#   depends_on = [aws_ecr_repository.geoshiny]
+#   name = "goeshiny"
+#   build {
+#     path = "~/Public"
+#     tag = ["shiny-spatial:1.0"]
+#     force_remove = false
+#     keep_locally = true
+#     # build_arg = {
+      
+#     # }
+#     label = {
+#       Author : "Roozbeh Valavi" 
+#       Email : "rvalavi@cesaraustralia.com"
+#       Website : "https://cesaraustralia.com/"
+#     }
+#   }  
+# }
+

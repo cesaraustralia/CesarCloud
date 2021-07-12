@@ -115,6 +115,25 @@ resource "aws_network_interface" "net_interface" {
   security_groups = [aws_security_group.security.id]
 }
 
+
+data "aws_eip" "eip" {
+  # id = "eipalloc-0aae8cdeab4e32fd3"
+  public_ip = "54.66.2.40"
+}
+
+# associate elastic public addrass
+resource "aws_eip_association" "eip_associate" {
+  allocation_id = data.aws_eip.eip.id
+  network_interface_id = aws_network_interface.net_interface.id
+  allow_reassociation  = true
+}
+
+# # print out the public ip of the server
+# output "server_public_ip" {
+#   description = "The instance public ip address"
+#   value = aws_eip.eip.public_ip
+# }
+
 # assign an elastic IP to the network interface
 # resource "aws_eip" "eip" {
 #   vpc                       = true
@@ -125,32 +144,9 @@ resource "aws_network_interface" "net_interface" {
 
 # # associate elastic public addrass
 # # keep the same public ipv4 address for this instance
-# resource "aws_eip_association" "eip_assoc" {
+# resource "aws_eip_association" "eip_associate" {
 #   # instance_id   = aws_instance.ec2.id
 #   allocation_id        = aws_eip.eip.id
 #   network_interface_id = aws_network_interface.net_interface.id
 #   allow_reassociation  = true
-# }
-
-
-
-data "aws_eip" "eip" {
-  # id = "eipalloc-0aae8cdeab4e32fd3"
-  public_ip = "54.66.2.40"
-  # vpc = true
-  # network_interface = aws_network_interface.network_interface.id
-  # association_id = aws_instance.ec2.id
-}
-
-# associate elastic public addrass
-resource "aws_eip_association" "eip_assoc" {
-  allocation_id = data.aws_eip.eip.id
-  network_interface_id = aws_network_interface.net_interface.id
-  allow_reassociation  = true
-}
-
-# # print out the public ip of the server
-# output "server_public_ip" {
-#   description = "The instance public ip address"
-#   value = aws_eip.eip.public_ip
 # }

@@ -54,8 +54,12 @@ resource "aws_instance" "ec2" {
               sudo apt update -y
               sudo apt install docker-ce docker-ce-cli containerd.io -y
               sudo apt install docker.io -y
+              sudo apt install awscli -y
 
-              # sudo docker run rocker/shiny:latest
+              # clone and build the docker containers
+              git clone https://github.com/rvalavi/CesarCloud.git ~/CesarCloud
+
+              # sudo docker run -d p3838:3838 --name shiny-spatial aws-ecr
 
               EOF
 
