@@ -57,9 +57,9 @@ resource "aws_instance" "ec2" {
               sudo apt install awscli -y
 
               # clone and build the docker containers
-              git clone https://github.com/rvalavi/CesarCloud.git ~/CesarCloud
+              #git clone https://github.com/rvalavi/CesarCloud.git ~/CesarCloud
 
-              # sudo docker run -d p3838:3838 --name shiny-spatial aws-ecr
+              # sudo docker-compose -f ~/CesarCloud/docker/setup-compose.yml 
 
               EOF
 

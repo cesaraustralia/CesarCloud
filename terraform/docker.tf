@@ -20,16 +20,14 @@ resource "null_resource" "local_geoshiny_build" {
     command = <<EOF
       #cd ../docker
       cd ~/Public
-      $(aws ecr get-login --registry-ids 851347699251 --no-include-email)
+      #$(aws ecr get-login --registry-ids 851347699251 --no-include-email)
+      aws ecr get-login --registry-ids 851347699251 --no-include-email      
       docker build -t shiny-spatial .
       docker tag shiny-spatial:latest aws_ecr_repository.geoshiny.repository_url:latest
       docker push aws_ecr_repository.geoshiny.repository_url
     EOF
   }
 }
-
-
-
 
 
 # provider "docker" {
