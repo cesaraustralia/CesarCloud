@@ -57,9 +57,8 @@ resource "aws_instance" "ec2" {
               sudo apt install awscli -y
 
               # clone and build the docker containers
-              #git clone https://github.com/rvalavi/CesarCloud.git ~/CesarCloud
-
-              # sudo docker-compose -f ~/CesarCloud/docker/setup-compose.yml 
+              git clone https://github.com/cesaraustralia/CesarCloud.git ~/CesarCloud
+              sudo docker-compose -f ~/CesarCloud/docker/setup-compose.yml up -d
 
               EOF
 
