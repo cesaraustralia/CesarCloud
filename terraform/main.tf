@@ -20,7 +20,7 @@ resource "aws_instance" "ec2" {
   ami               = "ami-0567f647e75c7bc05"
   instance_type     = "t2.micro"
   availability_zone = "ap-southeast-2a"
-  key_name          = "cesar-main-key"
+  key_name          = var.ssh_key
 
   network_interface {
     device_index         = 0
@@ -33,9 +33,6 @@ resource "aws_instance" "ec2" {
               #!/bin/bash
               sudo apt update -y
               sudo apt install git -y
-
-              sudo mkdir -p /srv/shiny-server
-              git clone https://github.com/cesaraustralia/daragrub.git /srv/shiny-server/daragrub
 
               # installing docker in the instance
               sudo apt-get install \
@@ -55,6 +52,10 @@ resource "aws_instance" "ec2" {
               sudo apt install docker-ce docker-ce-cli containerd.io -y
               sudo apt install docker.io -y
               sudo apt install awscli -y
+
+              # make shiny server directory and clone the apps
+              mkdir -p /srv/shiny-server
+              git clone https://github.com/cesaraustralia/daragrub.git /srv/shiny-server/daragrub
 
               # clone and build the docker containers
               git clone https://github.com/cesaraustralia/CesarCloud.git ~/CesarCloud

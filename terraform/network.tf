@@ -68,15 +68,13 @@ resource "aws_security_group" "security" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # cesar ip: 1.136.104.172
-  # home ip:  141.168.90.188
   ingress {
     description = "SSH"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-    # cidr_blocks = ["1.136.104.172","141.168.90.188"]
+    # cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = var.ssh_ips
   }
 
   ingress {
@@ -115,10 +113,9 @@ resource "aws_network_interface" "net_interface" {
   security_groups = [aws_security_group.security.id]
 }
 
-
+# use a static ip address for the instance
 data "aws_eip" "eip" {
-  # id = "eipalloc-0aae8cdeab4e32fd3"
-  public_ip = "54.66.2.40"
+  public_ip = var.static_ip
 }
 
 # associate elastic public addrass
@@ -128,11 +125,6 @@ resource "aws_eip_association" "eip_associate" {
   allow_reassociation  = true
 }
 
-# # print out the public ip of the server
-# output "server_public_ip" {
-#   description = "The instance public ip address"
-#   value = aws_eip.eip.public_ip
-# }
 
 # assign an elastic IP to the network interface
 # resource "aws_eip" "eip" {
