@@ -10,7 +10,7 @@ terraform {
 # configure the AWS Provider
 # region code for Sydney Australia
 provider "aws" {
-  region = "ap-southeast-2"
+  region = var.region
 }
 
 
@@ -19,15 +19,13 @@ provider "aws" {
 resource "aws_instance" "ec2" {
   ami               = "ami-0567f647e75c7bc05"
   instance_type     = "t2.micro"
-  availability_zone = "ap-southeast-2a"
+  availability_zone = var.zone
   key_name          = var.ssh_key
 
   network_interface {
     device_index         = 0
     network_interface_id = aws_network_interface.net_interface.id
   }
-
-  # allocation_id = aws_eip.eip.id
 
   user_data = <<-EOF
               #!/bin/bash
@@ -50,16 +48,15 @@ resource "aws_instance" "ec2" {
               
               sudo apt update -y
               sudo apt install docker-ce docker-ce-cli containerd.io -y
-              sudo apt install docker.io -y
-              sudo apt install awscli -y
+              sudo apt install docker.io docker-compose awscli -y
 
               # make shiny server directory and clone the apps
               mkdir -p /srv/shiny-server
               git clone https://github.com/cesaraustralia/daragrub.git /srv/shiny-server/daragrub
 
               # clone and build the docker containers
-              git clone https://github.com/cesaraustralia/CesarCloud.git ~/CesarCloud
-              sudo docker-compose -f ~/CesarCloud/docker/setup-compose.yml up -d
+              git clone https://github.com/cesaraustralia/CesarCloud.git /home/ubuntu/CesarCloud
+              sudo docker-compose -f /home/ubuntu/CesarCloud/docker/docker-compose.yml up -d
 
               EOF
 
@@ -68,17 +65,5 @@ resource "aws_instance" "ec2" {
   }
 }
 
-# ebs_block_device {
-#           + delete_on_termination = (known after apply)
-#           + device_name           = (known after apply)
-#           + encrypted             = (known after apply)
-#           + iops                  = (known after apply)
-#           + kms_key_id            = (known after apply)
-#           + snapshot_id           = (known after apply)
-#           + tags                  = (known after apply)
-#           + throughput            = (known after apply)
-#           + volume_id             = (known after apply)
-#           + volume_size           = (known after apply)
-#           + volume_type           = (known after apply)
-#  }
+# ebs_block_device { }
 

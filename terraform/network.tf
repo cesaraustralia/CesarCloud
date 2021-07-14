@@ -39,7 +39,7 @@ resource "aws_route_table" "route_table" {
 resource "aws_subnet" "subnet" {
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = "10.0.1.0/24"
-  availability_zone = "ap-southeast-2a"
+  availability_zone = var.zone
 
   tags = {
     Name = "cesar-server"
@@ -57,7 +57,7 @@ resource "aws_route_table_association" "rta" {
 # create security group and ploicies
 resource "aws_security_group" "security" {
   name        = "allow_connection"
-  description = "Allow SSH, HTTP and Postgres connections"
+  description = "Allow SSH, HTTP, Shiny and PostgreSQL connections"
   vpc_id      = aws_vpc.vpc.id
 
   ingress {
@@ -125,20 +125,3 @@ resource "aws_eip_association" "eip_associate" {
   allow_reassociation  = true
 }
 
-
-# assign an elastic IP to the network interface
-# resource "aws_eip" "eip" {
-#   vpc                       = true
-#   network_interface         = aws_network_interface.net_interface.id
-#   associate_with_private_ip = "10.0.1.50"
-#   depends_on                = [aws_internet_gateway.gw, aws_instance.ec2]
-# }
-
-# # associate elastic public addrass
-# # keep the same public ipv4 address for this instance
-# resource "aws_eip_association" "eip_associate" {
-#   # instance_id   = aws_instance.ec2.id
-#   allocation_id        = aws_eip.eip.id
-#   network_interface_id = aws_network_interface.net_interface.id
-#   allow_reassociation  = true
-# }

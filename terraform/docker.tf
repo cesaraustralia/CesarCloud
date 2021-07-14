@@ -20,14 +20,18 @@ resource "null_resource" "local_geoshiny_build" {
     command = <<EOF
       #!/bin/bash
       cd ../docker
-      aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin ${aws_ecr_repository.geoshiny.repository_url}
-      docker build -t shiny-spatial .
+      aws ecr get-login-password --region ${var.region} | docker login --username AWS --password-stdin ${aws_ecr_repository.geoshiny.repository_url}
+      
+      
       docker tag shiny-spatial:latest ${aws_ecr_repository.geoshiny.repository_url}:latest
       docker push ${aws_ecr_repository.geoshiny.repository_url}:latest
     EOF
   }
 }
 
+#docker build -t shiny-spatial .
+
+# aws_ecr_repository.geoshiny.docker_image.URL
 
 # provider "docker" {
 #   source = "kreuzwerker/docker"

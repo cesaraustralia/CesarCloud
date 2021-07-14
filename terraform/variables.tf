@@ -1,14 +1,26 @@
 # # define variables
 variable "static_ip" {
-  type = "string"
+  type = string
+  sensitive = true
 }
 
 # ips with access to the ssh to ec2
 variable "ssh_ips" {
-  type = "list"
+  type = list(string)
+  sensitive = true
 }
 
 # ssh key for accessing ec2
 variable "ssh_key" {
-  type = "string"
+  type = string
+  sensitive = true
+}
+
+# AWS region and availability zone
+variable "region" {
+  type = string
+}
+
+variable "zone" {
+  type = string
 }
