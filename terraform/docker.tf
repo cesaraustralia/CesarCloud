@@ -8,28 +8,30 @@ resource "aws_ecr_repository" "geoshiny" {
   }
 }
 
+# print ecr url
 output "ecr_ulr" {
   description = "The ECR URL"
-  value = aws_ecr_repository.geoshiny.repository_url
+  value       = aws_ecr_repository.geoshiny.repository_url
 }
 
 # build an image locally
 resource "null_resource" "local_geoshiny_build" {
   depends_on = [aws_ecr_repository.geoshiny]
+  # depends_on = [terraform_template]
   provisioner "local-exec" {
     command = <<EOF
       #!/bin/bash
-      cd ../docker
+      # cd ../docker
+      cd ~/Public
       aws ecr get-login-password --region ${var.region} | docker login --username AWS --password-stdin ${aws_ecr_repository.geoshiny.repository_url}
-      
-      
+      docker build -t shiny-spatial .
       docker tag shiny-spatial:latest ${aws_ecr_repository.geoshiny.repository_url}:latest
       docker push ${aws_ecr_repository.geoshiny.repository_url}:latest
     EOF
   }
 }
 
-#docker build -t shiny-spatial .
+
 
 # aws_ecr_repository.geoshiny.docker_image.URL
 
@@ -47,7 +49,7 @@ resource "null_resource" "local_geoshiny_build" {
 #     force_remove = false
 #     keep_locally = true
 #     # build_arg = {
-      
+
 #     # }
 #     label = {
 #       Author : "Roozbeh Valavi" 

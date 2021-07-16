@@ -6,3 +6,4 @@
 ./key.*
 terraform.tfstate
 terraform.tfstate.backup
+policy_test.json
