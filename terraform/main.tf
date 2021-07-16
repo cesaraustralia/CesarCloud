@@ -21,6 +21,7 @@ resource "aws_instance" "ec2" {
   instance_type     = "t2.micro"
   availability_zone = var.zone
   key_name          = var.ssh_key
+  iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
 
   network_interface {
     device_index         = 0
