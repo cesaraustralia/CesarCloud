@@ -1,6 +1,6 @@
 version: "3.3"
 services:
-  mypostgis:
+  postgis:
     image: postgis/postgis
     ports:
       - 5432:5432
@@ -10,8 +10,7 @@ services:
      - POSTGRES_DB=postgres
     volumes:
      - /var/lib/postgresql/data:/var/lib/postgresql/data
-  myshiny:
-    image: "${shiny_image}"
+  shiny:
     ports:
      - 3838:3838
     volumes:

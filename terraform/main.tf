@@ -61,6 +61,7 @@ resource "aws_instance" "ec2" {
               # clone and build the docker containers
               git clone https://github.com/cesaraustralia/CesarCloud.git /home/ubuntu/CesarCloud
               aws ecr get-login-password --region ${var.region} | sudo docker login --username AWS --password-stdin ${aws_ecr_repository.geoshiny.repository_url}
+              awk 'NR==14{print "    image: ${aws_ecr_repository.geoshiny.repository_url}:latest"}1' compose-temp.yml > docker-compose.yml
               sudo docker-compose -f /home/ubuntu/CesarCloud/docker/docker-compose.yml up -d
 
               EOF

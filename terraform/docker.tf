@@ -30,15 +30,3 @@ resource "null_resource" "local_geoshiny_build" {
     EOF
   }
 }
-
-# a template file to insert the ecr url to docker compose yaml
-data "terrform_file" "ecr_url" {
-  template = "${file("docker-sompose.yml")}"
-  vars = {
-    shiny_image = "${aws_ecr_repository.geoshiny.repository_url}:latest"
-  }
-}
-
-output "template" {
-  value = data.terrform_file.ecr_ulr.rendered
-}
