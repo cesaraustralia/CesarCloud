@@ -11,6 +11,7 @@ services:
     volumes:
      - /var/lib/postgresql/data:/var/lib/postgresql/data
   shiny:
+    image: shinyimage
     ports:
      - 3838:3838
     volumes:

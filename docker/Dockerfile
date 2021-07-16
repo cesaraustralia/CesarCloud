@@ -42,7 +42,7 @@ RUN apt-get update && \
 #RUN Rscript -e 'renv::restore()'
 RUN Rscript -e 'install.packages(c("shiny","shinydashboard","shinythemes"))'
 RUN Rscript -e 'install.packages(c("tidyverse","data.table","viridis","lubridate","plotly","DT","reshape2","ggmap","dbplyr","doParallel","rvest","cowplot"))'
-RUN Rscript -e 'install.packages(c("rgdal","rgeos","ncdf4","sf","terra","tmap","maptools","leaflet"))'
+RUN Rscript -e 'install.packages(c("rgdal","rgeos","ncdf4","sf","terra","tmap","maptools","leaflet"),dependencies=TRUE)'
 
 # expose port
 EXPOSE 3838

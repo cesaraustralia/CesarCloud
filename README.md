@@ -27,4 +27,4 @@ Cesar server on AWS runs docker containers to build desired apps and deliver ser
 - Shiny-spatial: a container with configured shiny server and all geospatial package for linux and R
 - Postgis: a container runing PostgreSQL relational database with PostGIS extension for spatial data support 
 
-The containers are setuped by `docker-compose`. The lines for images on the AWS Container Registery are inserted by `awk` commands.
+The containers are created by `docker-compose`. The images id/url on the AWS Container Registery are inserted by `awk` shell commands.
