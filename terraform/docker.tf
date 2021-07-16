@@ -21,8 +21,7 @@ resource "null_resource" "local_geoshiny_build" {
   provisioner "local-exec" {
     command = <<EOF
       #!/bin/bash
-      # cd ../docker
-      cd ~/Public
+      cd ../docker
       aws ecr get-login-password --region ${var.region} | docker login --username AWS --password-stdin ${aws_ecr_repository.geoshiny.repository_url}
       docker build -t shiny-spatial .
       docker tag shiny-spatial:${var.shiny_tag} ${aws_ecr_repository.geoshiny.repository_url}:${var.shiny_tag}
