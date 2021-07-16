@@ -25,8 +25,8 @@ resource "null_resource" "local_geoshiny_build" {
       cd ~/Public
       aws ecr get-login-password --region ${var.region} | docker login --username AWS --password-stdin ${aws_ecr_repository.geoshiny.repository_url}
       docker build -t shiny-spatial .
-      docker tag shiny-spatial:latest ${aws_ecr_repository.geoshiny.repository_url}:latest
-      docker push ${aws_ecr_repository.geoshiny.repository_url}:latest
+      docker tag shiny-spatial:${var.shiny_tag} ${aws_ecr_repository.geoshiny.repository_url}:${var.shiny_tag}
+      docker push ${aws_ecr_repository.geoshiny.repository_url}:${var.shiny_tag}
     EOF
   }
 }

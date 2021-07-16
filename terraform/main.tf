@@ -22,6 +22,7 @@ resource "aws_instance" "ec2" {
   availability_zone = var.zone
   key_name          = var.ssh_key
 
+  # assing the plicies to this ec2
   iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
 
   network_interface {
@@ -62,8 +63,8 @@ resource "aws_instance" "ec2" {
               git clone https://github.com/cesaraustralia/CesarCloud.git ~/CesarCloud
               aws ecr get-login-password --region ${var.region} | sudo docker login --username AWS --password-stdin ${aws_ecr_repository.geoshiny.repository_url}
               cd ~/CesarCloud/docker
-              awk 'NR==14{print "    image: ${aws_ecr_repository.geoshiny.repository_url}:latest"}1' compose-temp.yml > docker-compose.yml
-              sudo docker-compose -f ~/CesarCloud/docker/docker-compose.yml up -d
+              awk 'NR==14{print "    image: ${aws_ecr_repository.geoshiny.repository_url}:${var.shiny_tag}"}1' compose-temp.yml > docker-compose.yml
+              sudo docker-compose -f docker-compose.yml up -d
 
               EOF
 
