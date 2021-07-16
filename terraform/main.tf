@@ -59,10 +59,11 @@ resource "aws_instance" "ec2" {
               git clone https://github.com/cesaraustralia/daragrub.git /srv/shiny-server/daragrub
 
               # clone and build the docker containers
-              git clone https://github.com/cesaraustralia/CesarCloud.git /home/ubuntu/CesarCloud
+              git clone https://github.com/cesaraustralia/CesarCloud.git ~/CesarCloud
               aws ecr get-login-password --region ${var.region} | sudo docker login --username AWS --password-stdin ${aws_ecr_repository.geoshiny.repository_url}
+              cd ~/CesarCloud/docker
               awk 'NR==14{print "    image: ${aws_ecr_repository.geoshiny.repository_url}:latest"}1' compose-temp.yml > docker-compose.yml
-              sudo docker-compose -f /home/ubuntu/CesarCloud/docker/docker-compose.yml up -d
+              sudo docker-compose -f ~/CesarCloud/docker/docker-compose.yml up -d
 
               EOF
 
