@@ -32,9 +32,6 @@ resource "aws_iam_policy" "ecr_access_policy" {
             "Action": [
                 "ecr:*"
             ],
-            "Principal": {
-              "AWS": "851347699251"
-            },
             "Resource": "*"
         }
     ]

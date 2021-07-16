@@ -31,31 +31,14 @@ resource "null_resource" "local_geoshiny_build" {
   }
 }
 
+# a template file to insert the ecr url to docker compose yaml
+data "terrform_file" "ecr_url" {
+  template = "${file("docker-sompose.yml")}"
+  vars = {
+    shiny_image = "${aws_ecr_repository.geoshiny.repository_url}:latest"
+  }
+}
 
-
-# aws_ecr_repository.geoshiny.docker_image.URL
-
-# provider "docker" {
-#   source = "kreuzwerker/docker"
-# }
-
-# # build the docker image locally
-# resource "docker_image" "geoshiny_build" {
-#   depends_on = [aws_ecr_repository.geoshiny]
-#   name = "goeshiny"
-#   build {
-#     path = "~/Public"
-#     tag = ["shiny-spatial:1.0"]
-#     force_remove = false
-#     keep_locally = true
-#     # build_arg = {
-
-#     # }
-#     label = {
-#       Author : "Roozbeh Valavi" 
-#       Email : "rvalavi@cesaraustralia.com"
-#       Website : "https://cesaraustralia.com/"
-#     }
-#   }  
-# }
-
+output "template" {
+  value = data.terrform_file.ecr_ulr.rendered
+}

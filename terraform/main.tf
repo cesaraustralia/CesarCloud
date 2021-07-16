@@ -21,6 +21,7 @@ resource "aws_instance" "ec2" {
   instance_type     = "t2.micro"
   availability_zone = var.zone
   key_name          = var.ssh_key
+
   iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
 
   network_interface {
@@ -49,7 +50,9 @@ resource "aws_instance" "ec2" {
               
               sudo apt update -y
               sudo apt install docker-ce docker-ce-cli containerd.io -y
-              sudo apt install docker.io docker-compose awscli -y
+              sudo apt install docker.io -y
+              sudo apt install docker-compose -y
+              sudo apt install awscli -y
 
               # make shiny server directory and clone the apps
               mkdir -p /srv/shiny-server
@@ -57,6 +60,7 @@ resource "aws_instance" "ec2" {
 
               # clone and build the docker containers
               git clone https://github.com/cesaraustralia/CesarCloud.git /home/ubuntu/CesarCloud
+              aws ecr get-login-password --region ${var.region} | sudo docker login --username AWS --password-stdin ${aws_ecr_repository.geoshiny.repository_url}
               sudo docker-compose -f /home/ubuntu/CesarCloud/docker/docker-compose.yml up -d
 
               EOF

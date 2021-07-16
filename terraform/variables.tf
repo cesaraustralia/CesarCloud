@@ -25,6 +25,6 @@ variable "zone" {
   type = string
 }
 
-variable "account_id" {
-  type = list(string)
-}
+# variable "account_id" {
+#   type = list(string)
+# }
