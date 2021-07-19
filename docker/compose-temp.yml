@@ -13,7 +13,7 @@ services:
   shiny:
     image: shinyimage
     ports:
-     - 3838:3838
+     - 80:3838
     volumes:
      - /srv/shiny-server:/srv/shiny-server
      - /var/log/shiny-server:/var/log/shiny-server

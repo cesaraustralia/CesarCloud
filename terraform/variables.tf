@@ -20,7 +20,7 @@ variable "ssh_key" {
 variable "region" {
   type = string
 }
-
+# availability zone
 variable "zone" {
   type = string
 }
