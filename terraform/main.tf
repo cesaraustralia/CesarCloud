@@ -5,6 +5,11 @@ terraform {
       version = "~> 3.0"
     }
   }
+  backend "s3" {
+    bucket = "cesar-test-bucket1"
+    key    = "terraform-state"
+    region = "ap-southeast-2"
+  }
 }
 
 # configure the AWS Provider
@@ -22,9 +27,15 @@ resource "aws_instance" "ec2" {
   availability_zone = var.zone
   key_name          = var.ssh_key
 
-  # assing the plicies to this ec2
-  iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
 
+  # setup the EBS volume
+  root_block_device {
+    delete_on_termination = false
+  }
+
+  # assign the plicies to this ec2
+  iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
+  # connect instance to a defined network
   network_interface {
     device_index         = 0
     network_interface_id = aws_network_interface.net_interface.id

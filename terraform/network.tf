@@ -73,7 +73,6 @@ resource "aws_security_group" "security" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    # cidr_blocks = ["0.0.0.0/0"]
     cidr_blocks = var.ssh_ips
   }
 
@@ -111,9 +110,13 @@ resource "aws_network_interface" "net_interface" {
   subnet_id       = aws_subnet.subnet.id
   private_ips     = ["10.0.1.50"]
   security_groups = [aws_security_group.security.id]
+
+  tags = {
+    Name = "cesar-server"
+  }
 }
 
-# use a static ip address for the instance
+# use a manually created static ip address for the instance
 data "aws_eip" "eip" {
   public_ip = var.static_ip
 }

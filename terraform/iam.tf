@@ -51,3 +51,23 @@ resource "aws_iam_instance_profile" "ec2_profile" {
   name  = "ec2-profile"
   role = aws_iam_role.ec2_ecr_access_role.name
 }
+
+# # Define policy ARNs as list
+# variable "iam_policy_arn" {
+#   description = "IAM Policy to be attached to role"
+#   type = "list"
+# }
+
+# # Then parse through the list using count
+# resource "aws_iam_role_policy_attachment" "role-policy-attachment" {
+#   role       = "${var.iam_role_name}"
+#   count      = "${length(var.iam_policy_arn)}"
+#   policy_arn = "${var.iam_policy_arn[count.index]}"
+# }
+
+# # terraform vars
+# iam_policy_arn = [
+#   "arn:aws:iam::aws:policy/AmazonEC2FullAccess", 
+#   "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+# ]
+

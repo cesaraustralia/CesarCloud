@@ -35,3 +35,8 @@ variable "dbpass" {
   type = string
   sensitive = true
 }
+
+# s3 bucket name
+variable "s3_bucket" {
+  type = string
+}
