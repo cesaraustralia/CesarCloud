@@ -1,6 +1,5 @@
-# Base image https://hub.docker.com/u/rocker/
 FROM rocker/shiny:latest
-LABEL Author="Roozbeh Valavi" Email="rvalavi@cesaraustralia.com"
+LABEL Maintainer="rvalavi@cesaraustralia.com"
 
 # install libraries of general use
 RUN apt-get update -qq && apt-get -y --no-install-recommends install \
@@ -34,14 +33,13 @@ RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get clean
 
-
 # install R packages
 ## install renv & restore packages
 #RUN Rscript -e 'install.packages("renv")'
 #RUN Rscript -e 'renv::consent(provided = TRUE)'
 #RUN Rscript -e 'renv::restore()'
-RUN Rscript -e 'install.packages(c("shiny","shinydashboard","shinythemes"))'
-RUN Rscript -e 'install.packages(c("tidyverse","data.table","viridis","lubridate","plotly","DT","reshape2","ggmap","dbplyr","doParallel","rvest","cowplot"))'
+RUN Rscript -e 'install.packages(c("shiny","shinydashboard","shinythemes","shinyWidgets","tableHTML"))'
+RUN Rscript -e 'install.packages(c("tidyverse","data.table","viridis","lubridate","plotly","DT","reshape2","ggmap","ggtext","ggrepel","dbplyr","doParallel","rvest","cowplot"))'
 RUN Rscript -e 'install.packages(c("rgdal","rgeos","ncdf4","sf","terra","tmap","maptools","leaflet"),dependencies=TRUE)'
 
 # expose port

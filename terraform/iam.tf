@@ -52,6 +52,10 @@ resource "aws_iam_instance_profile" "ec2_profile" {
   role = aws_iam_role.ec2_ecr_access_role.name
 }
 
+
+# remember to add S3 policies here *****
+
+
 # # Define policy ARNs as list
 # variable "iam_policy_arn" {
 #   description = "IAM Policy to be attached to role"
