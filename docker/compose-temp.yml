@@ -21,8 +21,8 @@ services:
      - /home/ubuntu/R/library:/usr/local/lib/R/site-library
   rstudio:
     image: rocker/rstudio:latest
-    port:
-      - 9595:8787
+    ports:
+      - 8787:8787
     environment:
       - PASSWORD=rstudiopass
     volumes:

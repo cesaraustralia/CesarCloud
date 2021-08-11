@@ -57,7 +57,8 @@ resource "aws_route_table_association" "rta" {
 # create security group and ploicies
 resource "aws_security_group" "security" {
   name        = "allow_connection"
-  description = "Allow SSH, HTTP, Shiny, RStudio and PostgreSQL connections"
+  description = "Allow SSH, HTTP, Shiny and PostgreSQL connections"
+  # description = "Allow SSH, HTTP, Shiny, RStudio and PostgreSQL connections"
   vpc_id      = aws_vpc.vpc.id
 
   ingress {
@@ -83,7 +84,7 @@ resource "aws_security_group" "security" {
     protocol    = "tcp"
     cidr_blocks = var.ssh_ips
   }
-  
+
   ingress {
     description = "Shiny"
     from_port   = 3838
@@ -92,13 +93,13 @@ resource "aws_security_group" "security" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  ingress {
-    description = "RStudio"
-    from_port   = 8787
-    to_port     = 8787
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  # ingress {
+  #   description = "RStudio"
+  #   from_port   = 8787
+  #   to_port     = 8787
+  #   protocol    = "tcp"
+  #   cidr_blocks = ["0.0.0.0/0"]
+  # }
 
 
   egress {

@@ -31,7 +31,15 @@ variable "shiny_tag" {
   type = string
 }
 # PostgreSQL database password
+variable "dbuser" {
+  type = string
+  sensitive = true
+}
 variable "dbpass" {
+  type = string
+  sensitive = true
+}
+variable "rspass" {
   type = string
   sensitive = true
 }
