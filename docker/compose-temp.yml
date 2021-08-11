@@ -1,3 +1,4 @@
+# add docker network here to connect to db form shiny wiht localhost and no lag
 version: "3.3"
 services:
   postgis:
@@ -5,8 +6,8 @@ services:
     ports:
       - 5432:5432
     environment:
-     - POSTGRES_PASSWORD=cesarau
-     - POSTGRES_USER=admin
+     - POSTGRES_USER=dbuser
+     - POSTGRES_PASSWORD=dbpass
      - POSTGRES_DB=postgres
     volumes:
      - /var/lib/postgresql/data:/var/lib/postgresql/data
@@ -17,3 +18,12 @@ services:
     volumes:
      - /srv/shiny-server:/srv/shiny-server
      - /var/log/shiny-server:/var/log/shiny-server
+     - /home/ubuntu/R/library:/usr/local/lib/R/site-library
+  rstudio:
+    image: rocker/rstudio:latest
+    port:
+      - 9595:8787
+    environment:
+      - PASSWORD=rstudiopass
+    volumes:
+      - /home/ubuntu/R/library:/usr/local/lib/R/site-library

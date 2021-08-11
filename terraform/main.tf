@@ -31,6 +31,7 @@ resource "aws_instance" "ec2" {
   # setup the EBS volume
   root_block_device {
     delete_on_termination = false
+    # volume_size = 100
   }
 
   # assign the plicies to this ec2
