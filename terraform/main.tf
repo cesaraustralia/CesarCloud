@@ -27,12 +27,14 @@ resource "aws_instance" "ec2" {
   availability_zone = var.zone
   key_name          = var.ssh_key
 
-
   # setup the EBS volume
   root_block_device {
     delete_on_termination = false
     volume_size = 30
   }
+
+  # depend of the docker images to be built first
+  depends_on = [null_resource.local_geoshiny_build]
 
   # assign the plicies to this ec2
   iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
