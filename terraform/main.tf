@@ -71,7 +71,8 @@ resource "aws_instance" "ec2" {
 
               # make shiny server directory and clone the apps
               mkdir -p /srv/shiny-server
-              git clone https://github.com/cesaraustralia/daragrub.git /srv/shiny-server/daragrub
+              git clone https://github.com/cesaraustralia/daragrub.git /srv/shiny-server/Pestimator
+              git clone https://github.com/cesaraustralia/CesarDatabase.git /srv/shiny-server/CesarDatabase
 
               # clone and build the docker containers
               git clone https://github.com/cesaraustralia/CesarCloud.git /home/ubuntu/CesarCloud

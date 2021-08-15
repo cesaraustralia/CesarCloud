@@ -25,4 +25,5 @@ services:
     environment:
       - PASSWORD=rstudiopass
     volumes:
+      - /srv/shiny-server:/srv/shiny-server
       - /var/log/shiny-server:/var/log/shiny-server
