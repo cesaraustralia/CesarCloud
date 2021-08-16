@@ -20,17 +20,16 @@ provider "aws" {
 
 
 # add a Ubuntu 20.4 instance on a EC2
-# t2.medium for the main server
 resource "aws_instance" "ec2" {
   ami               = "ami-0567f647e75c7bc05"
-  instance_type     = "t2.micro"
+  instance_type     = "t2.medium"
   availability_zone = var.zone
   key_name          = var.ssh_key
 
   # setup the EBS volume
   root_block_device {
     delete_on_termination = false
-    volume_size = 30
+    volume_size = 100
   }
 
   # depend of the docker images to be built first
@@ -73,6 +72,7 @@ resource "aws_instance" "ec2" {
               mkdir -p /srv/shiny-server
               git clone https://github.com/cesaraustralia/daragrub.git /srv/shiny-server/Pestimator
               git clone https://github.com/cesaraustralia/CesarDatabase.git /srv/shiny-server/CesarDatabase
+              git clone https://github.com/cesaraustralia/ausresistancemap.git /srv/shiny-server/AusResistanceMap
 
               # clone and build the docker containers
               git clone https://github.com/cesaraustralia/CesarCloud.git /home/ubuntu/CesarCloud
