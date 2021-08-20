@@ -6,7 +6,7 @@ terraform {
     }
   }
   backend "s3" {
-    bucket = "cesar-test-bucket1"
+    bucket = "cesar-storage"
     key    = "terraform-state"
     region = "ap-southeast-2"
   }
@@ -29,7 +29,7 @@ resource "aws_instance" "ec2" {
   # setup the EBS volume
   root_block_device {
     delete_on_termination = false
-    volume_size = 100
+    volume_size = 50
   }
 
   # depend of the docker images to be built first
@@ -45,6 +45,7 @@ resource "aws_instance" "ec2" {
 
   user_data = <<-EOF
               #!/bin/bash
+              # su ubuntu
               sudo apt update -y
               sudo apt install git -y
 
@@ -70,12 +71,12 @@ resource "aws_instance" "ec2" {
 
               # make shiny server directory and clone the apps
               mkdir -p /srv/shiny-server
-              git clone https://github.com/cesaraustralia/daragrub.git /srv/shiny-server/Pestimator
-              git clone https://github.com/cesaraustralia/CesarDatabase.git /srv/shiny-server/CesarDatabase
-              git clone https://github.com/cesaraustralia/ausresistancemap.git /srv/shiny-server/AusResistanceMap
+              git clone https://${var.git_token}@github.com/cesaraustralia/daragrub.git /srv/shiny-server/Pestimator
+              git clone https://${var.git_token}@github.com/cesaraustralia/CesarDatabase.git /srv/shiny-server/CesarDatabase
+              git clone https://${var.git_token}@github.com/cesaraustralia/ausresistancemap.git /srv/shiny-server/AusResistanceMap
 
               # clone and build the docker containers
-              git clone https://github.com/cesaraustralia/CesarCloud.git /home/ubuntu/CesarCloud
+              git clone https://${var.git_token}@github.com/cesaraustralia/CesarCloud.git /home/ubuntu/CesarCloud
               aws ecr get-login-password --region ${var.region} | sudo docker login --username AWS --password-stdin ${aws_ecr_repository.geoshiny.repository_url}
               cd /home/ubuntu/CesarCloud/docker
               # modify the docker compose file with terraform variables
@@ -99,5 +100,16 @@ resource "aws_instance" "ec2" {
   }
 }
 
-# ebs_block_device { }
+# # read and attch aws ebs volume
+# data "aws_ebs_volume" "ebs" {  
+#   filter {
+#     name   = "volume-id"
+#     values = ["vol-0c92e505f8cc089a8"]
+#   }
+# }
 
+# resource "aws_volume_attachment" "ebs_attach" {
+#   device_name = "/dev/sdh"
+#   volume_id   = aws_ebs_volume.ebs.id
+#   instance_id = aws_instance.ec2.id
+# }

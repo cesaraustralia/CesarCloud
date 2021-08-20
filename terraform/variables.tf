@@ -48,3 +48,8 @@ variable "rspass" {
 variable "s3_bucket" {
   type = string
 }
+
+variable "git_token" {
+  type = string
+  sensitive = true
+}

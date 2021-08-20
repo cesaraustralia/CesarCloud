@@ -38,7 +38,7 @@ RUN apt-get update && \
 #RUN Rscript -e 'install.packages("renv")'
 #RUN Rscript -e 'renv::consent(provided = TRUE)'
 #RUN Rscript -e 'renv::restore()'
-RUN Rscript -e 'install.packages(c("shiny","shinydashboard","shinythemes","shinyWidgets","tableHTML"))'
+RUN Rscript -e 'install.packages(c("shiny","shinydashboard","shinythemes","shinyWidgets","shinyjs","shinyauthr","tableHTML"))'
 RUN Rscript -e 'install.packages(c("tidyverse","data.table","viridis","lubridate","plotly","DT","reshape2","ggmap","ggtext","ggrepel","doParallel","rvest","cowplot"))'
 RUN Rscript -e 'install.packages(c("rgdal","rgeos","ncdf4","sf","terra","tmap","maptools","leaflet"),dependencies=TRUE)'
 RUN Rscript -e 'install.packages(c("DBI", "RPostgres", "pool", "dbplyr"), dependencies=TRUE)'
