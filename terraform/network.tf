@@ -92,14 +92,6 @@ resource "aws_security_group" "security" {
     cidr_blocks = var.ssh_ips
   }
 
-  # ingress {
-  #   description = "Shiny"
-  #   from_port   = 3838
-  #   to_port     = 3838
-  #   protocol    = "tcp"
-  #   cidr_blocks = ["0.0.0.0/0"]
-  # }
-
   ingress {
     description = "RStudio"
     from_port   = 8787

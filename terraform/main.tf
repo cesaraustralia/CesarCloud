@@ -82,16 +82,24 @@ resource "aws_instance" "ec2" {
               # modify the docker compose file with terraform variables
               awk '{sub("dbuser","${var.dbuser}")}1' compose-temp.yml | \
                 awk '{sub("dbpass","${var.dbpass}")}1' | \
-                awk '{sub("shinyimage","${aws_ecr_repository.geoshiny.repository_url}:${var.shiny_tag}")}1' | \
+                awk '{sub("dbname","${var.dbname}")}1' | \
+                awk '{sub("shinyimage","${aws_ecr_repository.geoshiny.repository_url}:latest")}1' | \
                 awk '{sub("rstudiopass","${var.rspass}")}1' > docker-compose.yml
               sudo docker-compose -f docker-compose.yml up -d
 
               # now create the environment file for shiny apps
               echo -e "POSTGRES_USER=${var.dbuser}" >> .Renviron
               echo -e "POSTGRES_PASSWORD=${var.dbpass}" >> .Renviron
-              echo -e "POSTGRES_DB=postgres" >> .Renviron
+              echo -e "POSTGRES_DB=${var.dbname}" >> .Renviron
               sudo docker cp .Renviron docker_shiny_1:/home/shiny
               rm .Renviron
+
+              # recover the database backup from our storage
+              mkdir -p /home/ubuntu/db_backup
+              cd /home/ubuntu/db_backup
+              aws s3 cp s3://${var.s3_bucket}/database-backups/dump_latest_backup.gz .
+              gunzip < dump_latest_backup.gz | sudo docker exec -i docker_postgis_1 psql -U ${var.dbuser} -d ${var.dbname}
+              sudo rm /home/ubuntu/db_backup/*
 
               EOF
 

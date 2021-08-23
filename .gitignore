@@ -8,3 +8,5 @@ terraform.tfstate
 terraform.tfstate.backup
 policy_test.json
 ec2_db_test.tf
+terraform-dev/*
+terraform-dev
