@@ -100,7 +100,7 @@ resource "aws_instance" "ec2" {
               sudo chown ubuntu:ubuntu /home/ubuntu/db_backup/
               cd /home/ubuntu/db_backup
               aws s3 cp s3://${var.s3_bucket}/database-backups/pg_backup_latest.gz .
-              gunzip < pg_backup_latest.gz | docker exec -i docker_postgis_1 psql -U ${var.dbuser} -d ${var.dbname}
+              gunzip < pg_backup_latest.gz | sudo docker exec -i docker_postgis_1 psql -U ${var.dbuser} -d ${var.dbname}
               rm /home/ubuntu/db_backup/*
 
               # set up a cron jobs to backup db every Sunday
