@@ -1,6 +1,6 @@
 # IAM role for accessing resources within EC2
 resource "aws_iam_role" "ec2_access_role" {
-  name               = "ecr-role"
+  name               = "ec2-access-role"
   assume_role_policy = <<EOF
 {
    "Version": "2012-10-17",
@@ -16,6 +16,10 @@ resource "aws_iam_role" "ec2_access_role" {
    ]
 }
   EOF
+
+  tags = {
+    Name = "cesar-server"
+  }
 }
 
 
@@ -76,6 +80,10 @@ resource "aws_iam_policy_attachment" "s3_policy_attach" {
 resource "aws_iam_instance_profile" "ec2_profile" {
   name  = "ec2-profile"
   role = aws_iam_role.ec2_access_role.name
+
+  tags = {
+    Name = "cesar-server"
+  }
 }
 
 

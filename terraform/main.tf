@@ -45,12 +45,11 @@ resource "aws_instance" "ec2" {
 
   user_data = <<-EOF
               #!/bin/bash
-              # su ubuntu
               sudo apt update -y
               sudo apt install git -y
 
               # installing docker in the instance
-              sudo apt-get install \
+              sudo apt install \
                 apt-transport-https \
                 ca-certificates \
                 curl \
@@ -83,7 +82,7 @@ resource "aws_instance" "ec2" {
               awk '{sub("dbuser","${var.dbuser}")}1' compose-temp.yml | \
                 awk '{sub("dbpass","${var.dbpass}")}1' | \
                 awk '{sub("dbname","${var.dbname}")}1' | \
-                awk '{sub("shinyimage","${aws_ecr_repository.geoshiny.repository_url}:latest")}1' | \
+                awk '{sub("shinyimage","${aws_ecr_repository.geoshiny.repository_url}:${var.shiny_tag}")}1' | \
                 awk '{sub("rstudiopass","${var.rspass}")}1' > docker-compose.yml
               sudo docker-compose -f docker-compose.yml up -d
 
@@ -94,12 +93,18 @@ resource "aws_instance" "ec2" {
               sudo docker cp .Renviron docker_shiny_1:/home/shiny
               rm .Renviron
 
+
               # recover the database backup from our storage
               mkdir -p /home/ubuntu/db_backup
               cd /home/ubuntu/db_backup
-              aws s3 cp s3://${var.s3_bucket}/database-backups/dump_latest_backup.gz .
-              gunzip < dump_latest_backup.gz | sudo docker exec -i docker_postgis_1 psql -U ${var.dbuser} -d ${var.dbname}
-              sudo rm /home/ubuntu/db_backup/*
+              aws s3 cp s3://${var.s3_bucket}/database-backups/pg_backup_latest.gz .
+              gunzip < pg_backup_latest.gz | sudo docker exec -i docker_postgis_1 psql -U ${var.dbuser} -d ${var.dbname}
+              rm /home/ubuntu/db_backup/*
+
+              # set up a cron job to backup db every Sunday
+              echo -e '30 03 * * SUN /usr/bin/docker exec -t docker_postgis_1 pg_dumpall -c -U ${var.dbuser} | gzip > /home/ubuntu/db_backup/pg_backup_`date +"\%y-\%m-\%d_\%H_\%M_\%S"`.gz' >> /var/spool/cron/crontabs/root
+              echo -e '35 03 * * SUN /usr/bin/docker exec -t docker_postgis_1 pg_dumpall -c -U ${var.dbuser} | gzip > /home/ubuntu/db_backup/pg_backup_latest.gz' >> /var/spool/cron/crontabs/root
+              echo -e '45 03 * * SUN aws s3 sync /home/ubuntu/db_backup s3://${var.s3_bucket}/database-backups/ && rm /home/ubuntu/db_backup/*' >> /var/spool/cron/crontabs/root
 
               EOF
 
@@ -108,16 +113,3 @@ resource "aws_instance" "ec2" {
   }
 }
 
-# # read and attch aws ebs volume
-# data "aws_ebs_volume" "ebs" {  
-#   filter {
-#     name   = "volume-id"
-#     values = ["vol-0c92e505f8cc089a8"]
-#   }
-# }
-
-# resource "aws_volume_attachment" "ebs_attach" {
-#   device_name = "/dev/sdh"
-#   volume_id   = aws_ebs_volume.ebs.id
-#   instance_id = aws_instance.ec2.id
-# }
