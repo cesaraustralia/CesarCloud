@@ -84,6 +84,7 @@ resource "aws_instance" "ec2" {
                 awk '{sub("dbname","${var.dbname}")}1' | \
                 awk '{sub("shinyimage","${aws_ecr_repository.geoshiny.repository_url}:${var.shiny_tag}")}1' | \
                 awk '{sub("rstudiopass","${var.rspass}")}1' > docker-compose.yml
+              # now run the containers
               sudo docker-compose -f docker-compose.yml up -d
 
               # now create the environment file for shiny apps
@@ -96,15 +97,19 @@ resource "aws_instance" "ec2" {
 
               # recover the database backup from our storage
               mkdir -p /home/ubuntu/db_backup
+              sudo chown ubuntu:ubuntu /home/ubuntu/db_backup/
               cd /home/ubuntu/db_backup
               aws s3 cp s3://${var.s3_bucket}/database-backups/pg_backup_latest.gz .
-              gunzip < pg_backup_latest.gz | sudo docker exec -i docker_postgis_1 psql -U ${var.dbuser} -d ${var.dbname}
+              gunzip < pg_backup_latest.gz | docker exec -i docker_postgis_1 psql -U ${var.dbuser} -d ${var.dbname}
               rm /home/ubuntu/db_backup/*
 
-              # set up a cron job to backup db every Sunday
-              echo -e '30 03 * * SUN /usr/bin/docker exec -t docker_postgis_1 pg_dumpall -c -U ${var.dbuser} | gzip > /home/ubuntu/db_backup/pg_backup_`date +"\%y-\%m-\%d_\%H_\%M_\%S"`.gz' >> /var/spool/cron/crontabs/root
-              echo -e '35 03 * * SUN /usr/bin/docker exec -t docker_postgis_1 pg_dumpall -c -U ${var.dbuser} | gzip > /home/ubuntu/db_backup/pg_backup_latest.gz' >> /var/spool/cron/crontabs/root
-              echo -e '45 03 * * SUN aws s3 sync /home/ubuntu/db_backup s3://${var.s3_bucket}/database-backups/ && rm /home/ubuntu/db_backup/*' >> /var/spool/cron/crontabs/root
+              # set up a cron jobs to backup db every Sunday
+              line='0 3 * * 0 sudo docker exec -t docker_postgis_1 pg_dumpall -c -U ${var.dbuser} | gzip > /home/ubuntu/db_backup/pg_backup_`date +"\%y-\%m-\%d_\%H_\%M_\%S"`.gz'
+              (crontab -u root -l; echo "$line" ) | crontab -u root -
+              line='5 3 * * 0 sudo docker exec -t docker_postgis_1 pg_dumpall -c -U ${var.dbuser} | gzip > /home/ubuntu/db_backup/pg_backup_latest.gz'
+              (crontab -u root -l; echo "$line" ) | crontab -u root -
+              line='10 3 * * 0 aws s3 sync /home/ubuntu/db_backup s3://${var.s3_bucket}/database-backups/ && rm /home/ubuntu/db_backup/*'
+              (crontab -u root -l; echo "$line" ) | crontab -u root -
 
               EOF
 
