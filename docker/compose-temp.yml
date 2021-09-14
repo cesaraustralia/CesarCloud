@@ -11,6 +11,7 @@ services:
      - POSTGRES_DB=dbname
     volumes:
      - /var/lib/postgresql/data:/var/lib/postgresql/data
+     - /home/ubuntu/db_upload:/home/db_upload
   shiny:
     image: shinyimage
     ports:
@@ -18,6 +19,7 @@ services:
     volumes:
      - /srv/shiny-server:/srv/shiny-server
      - /var/log/shiny-server:/var/log/shiny-server
+     - /home/ubuntu/db_upload:/home/db_upload
   rstudio:
     image: rocker/rstudio:latest
     ports:

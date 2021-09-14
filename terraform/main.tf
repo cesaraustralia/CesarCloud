@@ -69,12 +69,13 @@ resource "aws_instance" "ec2" {
               sudo apt install awscli -y
 
               # make shiny server directory and clone the apps
-              mkdir -p /srv/shiny-server
+              sudo -u ubuntu mkdir -p /srv/shiny-server
               git clone https://${var.git_token}@github.com/cesaraustralia/daragrub.git /srv/shiny-server/Pestimator
               git clone https://${var.git_token}@github.com/cesaraustralia/CesarDatabase.git /srv/shiny-server/CesarDatabase
               git clone https://${var.git_token}@github.com/cesaraustralia/ausresistancemap.git /srv/shiny-server/AusResistanceMap
 
               # clone and build the docker containers
+              sudo -u ubuntu mkdir -p /home/ubuntu/CesarCloud
               git clone https://${var.git_token}@github.com/cesaraustralia/CesarCloud.git /home/ubuntu/CesarCloud
               aws ecr get-login-password --region ${var.region} | sudo docker login --username AWS --password-stdin ${aws_ecr_repository.geoshiny.repository_url}
               cd /home/ubuntu/CesarCloud/docker
@@ -85,7 +86,7 @@ resource "aws_instance" "ec2" {
                 awk '{sub("shinyimage","${aws_ecr_repository.geoshiny.repository_url}:${var.shiny_tag}")}1' | \
                 awk '{sub("rstudiopass","${var.rspass}")}1' > docker-compose.yml
               # now run the containers
-              sudo docker-compose -f docker-compose.yml up -d
+              sudo docker-compose -f /home/ubuntu/CesarCloud/docker/docker-compose.yml up -d
 
               # now create the environment file for shiny apps
               echo -e "POSTGRES_USER=${var.dbuser}" >> .Renviron
@@ -96,12 +97,14 @@ resource "aws_instance" "ec2" {
 
 
               # recover the database backup from our storage
-              mkdir -p /home/ubuntu/db_backup
-              sudo chown ubuntu:ubuntu /home/ubuntu/db_backup/
+              sudo -u ubuntu mkdir -p /home/ubuntu/db_backup              
               cd /home/ubuntu/db_backup
-              aws s3 cp s3://${var.s3_bucket}/database-backups/pg_backup_latest.gz .
+              aws s3 cp s3://${var.s3_bucket}/database-backups/pg_backup_latest.gz . && \
               sudo gunzip < pg_backup_latest.gz | sudo docker exec -i docker_postgis_1 psql -U ${var.dbuser} -d ${var.dbname}
               rm /home/ubuntu/db_backup/*
+
+              # create a folder for upload file to db
+              sudo -u ubuntu mkdir -p /home/ubuntu/db_upload
 
               # set up a cron jobs to backup db every Sunday
               line='0 3 * * 0 sudo docker exec -t docker_postgis_1 pg_dumpall -c -U ${var.dbuser} | gzip > /home/ubuntu/db_backup/pg_backup_`date +"\%y-\%m-\%d_\%H_\%M_\%S"`.gz'
