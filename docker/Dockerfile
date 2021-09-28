@@ -12,6 +12,8 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
     unixodbc-dev \
     libcurl4-openssl-dev \
     libssl-dev \
+    texlive \
+    texlive-latex-extra \
     libgit2-dev \
     git
 

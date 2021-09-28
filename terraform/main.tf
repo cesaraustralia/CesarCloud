@@ -68,6 +68,11 @@ resource "aws_instance" "ec2" {
               sudo apt install docker-compose -y
               sudo apt install awscli -y
 
+              # add docker to groups
+              sudo groupadd docker
+              sudo usermod -aG docker $USER
+              newgrp docker
+
               # make shiny server directory and clone the apps
               sudo -u ubuntu mkdir -p /srv/shiny-server
               git clone https://${var.git_token}@github.com/cesaraustralia/daragrub.git /srv/shiny-server/Pestimator
