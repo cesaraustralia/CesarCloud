@@ -1,6 +1,6 @@
 # Cesar Australia Cloud Infrastructure
 
-Automation of creating and provisioning AWS instances as Cesar infrastructure
+Automation of creating and provisioning AWS instances as Cesar infrastructure (documentation is in progress)
 
 ## Setup
 
