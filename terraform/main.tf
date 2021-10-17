@@ -76,6 +76,7 @@ resource "aws_instance" "ec2" {
               # make shiny server directory and clone the apps
               sudo -u ubuntu mkdir -p /srv/shiny-server
               git clone https://${var.git_token}@github.com/cesaraustralia/daragrub.git /srv/shiny-server/Pestimator
+              git clone https://${var.git_token}@github.com/cesaraustralia/daragrub.git /srv/shiny-server/predict-a-pest
               git clone https://${var.git_token}@github.com/cesaraustralia/CesarDatabase.git /srv/shiny-server/CesarDatabase
               git clone https://${var.git_token}@github.com/cesaraustralia/ausresistancemap.git /srv/shiny-server/AusResistanceMap
 
