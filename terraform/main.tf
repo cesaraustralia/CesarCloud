@@ -67,11 +67,20 @@ resource "aws_instance" "ec2" {
               sudo apt install docker.io -y
               sudo apt install docker-compose -y
               sudo apt install awscli -y
+              # sudo apt install unattended-upgrades -y
+              # sudo dpkg-reconfigure --priority=low unattended-upgrades
 
               # add docker to groups
               sudo groupadd docker
               sudo usermod -aG docker $USER
               newgrp docker
+
+              # install AWS CodeDeploy
+              # sudo apt install ruby -y
+              # wget https://aws-codedeploy-ap-southeast-2.s3.ap-southeast-2.amazonaws.com/latest/install
+              # chmod +x ./install
+              # sudo ./install auto
+              # sudo service codedeploy-agent start
 
               # make shiny server directory and clone the apps
               sudo -u ubuntu mkdir -p /srv/shiny-server

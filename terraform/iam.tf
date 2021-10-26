@@ -23,7 +23,7 @@ resource "aws_iam_role" "ec2_access_role" {
 }
 
 
-# The IAM policy to give EC2 access to ECR
+# The IAM policy to give EC2 full access to ECR
 resource "aws_iam_policy" "ecr_access_policy" {
   name        = "ecr-assess-policy"
   description = "The IAM policy to give EC2 access to ECR"
