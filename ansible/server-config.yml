@@ -1,0 +1,7 @@
+# yaml file for setting up the server apps and tasks
+---
+- name: Install server apps
+  hosts: all
+  remote_user: ubuntu
+  become: yes
+
