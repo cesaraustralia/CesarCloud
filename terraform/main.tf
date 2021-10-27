@@ -70,7 +70,7 @@ resource "aws_instance" "ec2" {
               # sudo apt install unattended-upgrades -y
               # sudo dpkg-reconfigure --priority=low unattended-upgrades
 
-              # add docker to groups
+              # add docker to user groups
               sudo groupadd docker
               sudo usermod -aG docker $USER
               newgrp docker
@@ -102,6 +102,8 @@ resource "aws_instance" "ec2" {
                 awk '{sub("rstudiopass","${var.rspass}")}1' > docker-compose.yml
               # now run the containers
               sudo docker-compose -f /home/ubuntu/CesarCloud/docker/docker-compose.yml up -d
+              # sleep to make sure the docker is up and running
+              sleep 120
 
               # now create the environment file for shiny apps
               echo -e "POSTGRES_USER=${var.dbuser}" >> .Renviron
@@ -115,6 +117,7 @@ resource "aws_instance" "ec2" {
               sudo -u ubuntu mkdir -p /home/ubuntu/db_backup              
               cd /home/ubuntu/db_backup
               aws s3 cp s3://${var.s3_bucket}/database-backups/pg_backup_latest.gz . && \
+              sleep 60
               sudo gunzip < pg_backup_latest.gz | sudo docker exec -i docker_postgis_1 psql -U ${var.dbuser} -d ${var.dbname}
               rm /home/ubuntu/db_backup/*
 
