@@ -1,7 +1,84 @@
-# yaml file for setting up the server apps and tasks
+# # yaml file for setting up the server apps and tasks
 ---
-- name: Install server apps
+- name: Confiure the server, apps and tasks
   hosts: all
   remote_user: ubuntu
   become: yes
 
+  roles:
+    - packages
+    - repos
+    - docker
+    - database
+    - cronjobs
+
+
+# ---
+# - hosts: all
+#   tasks:
+#     - name: Install server apps
+#       remote_user: ubuntu
+#       become: true
+#       apt:
+#         state: present
+#         name:
+#           - git
+#           # - apt-transport-https
+#           # - ca-certificates
+#           # - curl
+#           # - gnupg
+#           # - lsb-release
+#           - docker.io
+#           - awscli
+#           - htop
+
+
+
+
+# ---
+# - hosts: all
+#   remote_user: ubuntu
+#   become: true
+#   tasks:
+#     - name: installa dipendenze
+#       apt:
+#         name: "{{item}}"
+#         state: present
+#         update_cache: yes
+#       loop:
+#         - apt-transport-https
+#         - ca-certificates
+#         - curl
+#         - gnupg-agent
+#         - software-properties-common
+#     - name: add docker GPG
+#       apt_key:
+#         url: https://download.docker.com/linux/ubuntu/gpg
+#         state: present
+#     - name: add apt repository
+#       apt_repository:
+#         repo: deb https://download.docker.com/linux/ubuntu bionic stable
+#         state: present
+#     - name: install docker, docker-cli and conteiner.io
+#       apt:
+#         name: "{{item}}"
+#         state: latest
+#         update_cache: yes
+#       loop:
+#         - docker-ce
+#         - docker-ce-cli
+#         - containerd.io
+#     - name: make sure that docker was started and enabled
+#       service:
+#         name: docker
+#         state: started
+#         enabled: yes
+        
+#     - name: install aws and other apps
+#       apt:
+#         state: present
+#         update_cache: yes
+#         name:
+#           - git
+#           - docker.io
+#           - awscli
