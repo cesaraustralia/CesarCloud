@@ -21,8 +21,8 @@ knitr::opts_chunk$set(
 ## Overview
 
 
-```{r, eval=TRUE, eval=FALSE, out.width = 800, echo=F, fig.align="center"}
-knitr::include_graphics("figures/AWS_architecture.jpg")
+```{r, eval=TRUE, eval=TRUE, out.width = 800, echo=F, fig.align="center"}
+knitr::include_graphics("AWS_architecture.jpg")
 ```
 
 ## Software and resources
