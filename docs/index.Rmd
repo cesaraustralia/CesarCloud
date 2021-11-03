@@ -44,5 +44,5 @@ knitr::include_graphics("figures/AWS_architecture.jpg")
 ### Shiny server and apps
 
 
-### PostgreSQL and PostGIS
+### PostgreSQL database
 
