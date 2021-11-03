@@ -3,10 +3,6 @@ variable "static_ip" {
   type = string
   sensitive = true
 }
-# variable "ec2_dsn" {
-#   type = string
-#   sensitive = true
-# }
 
 # ips with access to the ssh to ec2
 variable "ssh_ips" {
