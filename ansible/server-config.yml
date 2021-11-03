@@ -1,6 +1,6 @@
 # # yaml file for setting up the server apps and tasks
 ---
-- name: Confiure the server, apps and tasks
+- name: Configure the server - apps and tasks
   hosts: all
   remote_user: ubuntu
   become: yes

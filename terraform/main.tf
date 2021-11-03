@@ -75,13 +75,6 @@ resource "aws_instance" "ec2" {
               sudo usermod -aG docker $USER
               newgrp docker
 
-              # install AWS CodeDeploy
-              # sudo apt install ruby -y
-              # wget https://aws-codedeploy-ap-southeast-2.s3.ap-southeast-2.amazonaws.com/latest/install
-              # chmod +x ./install
-              # sudo ./install auto
-              # sudo service codedeploy-agent start
-
               # make shiny server directory and clone the apps
               sudo -u ubuntu mkdir -p /srv/shiny-server
               git clone https://${var.git_token}@github.com/cesaraustralia/daragrub.git /srv/shiny-server/Pestimator
@@ -102,6 +95,7 @@ resource "aws_instance" "ec2" {
                 awk '{sub("rstudiopass","${var.rspass}")}1' > docker-compose.yml
               # now run the containers
               sudo docker-compose -f /home/ubuntu/CesarCloud/docker/docker-compose.yml up -d
+              
               # sleep to make sure the docker is up and running
               sleep 120
 

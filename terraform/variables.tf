@@ -3,15 +3,28 @@ variable "static_ip" {
   type = string
   sensitive = true
 }
+# variable "ec2_dsn" {
+#   type = string
+#   sensitive = true
+# }
 
 # ips with access to the ssh to ec2
 variable "ssh_ips" {
   type = list(string)
   sensitive = true
 }
-
 # ssh key for accessing ec2
 variable "ssh_key" {
+  type = string
+  sensitive = true
+}
+# ssh directory
+variable "ssh_key_path" {
+  type = string
+  sensitive = true
+}
+# ssh directory
+variable "ssh_user" {
   type = string
   sensitive = true
 }
