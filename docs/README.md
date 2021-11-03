@@ -1,4 +1,4 @@
-# Documentation of the Cesar Cloud Server Configuration
+## Documentation of the Cesar Cloud Server Configuration
 
 
 See the link to github pages: ...

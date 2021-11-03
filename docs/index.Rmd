@@ -1,0 +1,48 @@
+---
+title: Cesar Australia Cloud Infrastructure
+author: "Roozbeh Valavi"
+email: "rvalavi@cesaraustralia.com"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_document:
+    fig_caption: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  eval = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  fig.align = "center"
+)
+```
+
+## Overview
+
+
+```{r, eval=TRUE, out.width = 800, echo=F, fig.align="center"}
+knitr::include_graphics("figures/AWS_architecture.jpg")
+```
+
+## Software and resources
+
+- Terraform resource: 
+
+- Ansible resource:
+
+- Docker resource:
+
+
+## Terraform configuration
+
+## Ansible configuration
+
+
+## Docker containers
+
+### Shiny server and apps
+
+
+### PostgreSQL and PostGIS
+

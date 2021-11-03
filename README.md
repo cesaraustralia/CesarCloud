@@ -6,11 +6,16 @@ Automation of creating and provisioning AWS instances as Cesar infrastructure (d
 
 The `Public IPv4` is created manually and attached to the instance by `terraform data`. The main `S3 bucket` is also created manually to protect our data from being lost through system failure/upgrade.
 
-System setup is by Terraform open source infrastructure as code (IaC) software tool. All the servises are containerised by Docker.
+System setup is by Terraform open source infrastructure as code (IaC) software tool. All the servises are containerised by docker containers.
 
-`terraform`
-`docker`
-`awscil`
+
+## Installation
+Software used for creating and provisioning the cloud system:
+
+- [Terraform](https://www.terraform.io/)
+- [Ansible](https://www.ansible.com/)
+- [Docker](https://docs.docker.com/get-docker/)
+- [AWS CLI](https://aws.amazon.com/cli/)
 
 
 ## Infrastructure
