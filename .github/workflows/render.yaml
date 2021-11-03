@@ -13,7 +13,7 @@ jobs:
       - name: Set up Git repository
         uses: actions/checkout@v2
       - name: Render document
-        uses: lc5415/rmarkdown-action@master
+        uses: lc5415/rmarkdown-action@1
         with:
           input_file: docs/index.Rmd
           output_format: html_document
