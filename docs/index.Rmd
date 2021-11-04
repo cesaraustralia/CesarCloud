@@ -20,8 +20,9 @@ knitr::opts_chunk$set(
 
 ## Overview
 
+Here is an overview of the workflow and major components of the server and the services provided. Each component will be explained in the following sections.
 
-```{r, eval=TRUE, eval=FALSE, out.width = 800, echo=F, fig.align="center"}
+```{r, echo=FALSE, eval=TRUE, out.width = 700, echo=F, fig.align="center"}
 knitr::include_graphics("AWS_architecture.jpg")
 ```
 
@@ -32,6 +33,8 @@ knitr::include_graphics("AWS_architecture.jpg")
 - Ansible resource:
 
 - Docker resource:
+
+- GitHub action resouece:
 
 
 ## Terraform configuration
@@ -46,3 +49,4 @@ knitr::include_graphics("AWS_architecture.jpg")
 
 ### PostgreSQL database
 
+## GitHub actions

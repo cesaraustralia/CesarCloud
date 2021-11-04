@@ -16,6 +16,7 @@ Software used for creating and provisioning the cloud system:
 - [Ansible](https://www.ansible.com/)
 - [Docker](https://docs.docker.com/get-docker/)
 - [AWS CLI](https://aws.amazon.com/cli/)
+- [GitHub Actions](https://github.com/features/actions)
 
 
 ## Infrastructure
@@ -36,3 +37,6 @@ The containers are created by `docker-compose`. The images id/URL on the AWS Con
 
 ## PostgreSQL database
 The database is a PostgreSQL running inside a docker container. The database and all data inside are backup every week and stored in the main S3 bucket.
+
+## GitHub actions
+For maintaining the CI/CD pipeline, GitHub actions are used to automate updating the web application as soon as the code in their corresponding repositories is updated. Push or pull requests to the main/master branch trigger the GH actions and the code inside the repo will be pushed to the server.
