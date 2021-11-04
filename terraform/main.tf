@@ -43,6 +43,7 @@ resource "aws_instance" "ec2" {
     network_interface_id = aws_network_interface.net_interface.id
   }
 
+  # this section will be replaces with an ansible palybook
   user_data = <<-EOF
               #!/bin/bash
               sudo apt update -y
@@ -85,6 +86,7 @@ resource "aws_instance" "ec2" {
               # clone and build the docker containers
               sudo -u ubuntu mkdir -p /home/ubuntu/CesarCloud
               git clone https://${var.git_token}@github.com/cesaraustralia/CesarCloud.git /home/ubuntu/CesarCloud
+              
               aws ecr get-login-password --region ${var.region} | sudo docker login --username AWS --password-stdin ${aws_ecr_repository.geoshiny.repository_url}
               cd /home/ubuntu/CesarCloud/docker
               # modify the docker compose file with terraform variables

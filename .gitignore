@@ -6,6 +6,7 @@
 ./key.*
 terraform.tfstate
 terraform.tfstate.backup
+ansible_vars_file.yml
 policy_test.json
 ec2_db_test.tf
 terraform-dev/*

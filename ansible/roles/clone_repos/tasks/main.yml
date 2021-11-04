@@ -1,0 +1,30 @@
+---
+- name: clone the CesarCloud repo
+  ansible.builtin.git:
+    repo: 'https://{{ git_token }}@github.com/cesaraustralia/CesarCloud.git'
+    dest: /home/{{ remote_user }}/CesarCloud
+    update: yes
+
+- name: clone the CesarDatabase repo
+  ansible.builtin.git:
+    repo: 'https://{{ git_token }}@github.com/cesaraustralia/CesarDatabase.git'
+    dest: /srv/shiny-server/CesarDatabase
+    update: yes
+
+- name: clone the ausresistancemap repo
+  ansible.builtin.git:
+    repo: 'https://{{ git_token }}@github.com/cesaraustralia/ausresistancemap.git'
+    dest: /srv/shiny-server/AusResistanceMap
+    update: yes
+
+- name: clone the pestimator repo
+  ansible.builtin.git:
+    repo: 'https://github.com/cesaraustralia/daragrub.git'
+    dest: /srv/shiny-server/Pestimator
+    update: yes
+
+- name: clone the pestimator repo into predict-a-pest
+  ansible.builtin.git:
+    repo: 'https://github.com/cesaraustralia/daragrub.git'
+    dest: /srv/shiny-server/predict-a-pest
+    update: yes

@@ -20,7 +20,7 @@ variable "ssh_key_path" {
   sensitive = true
 }
 # ssh directory
-variable "ssh_user" {
+variable "remote_user" {
   type = string
   sensitive = true
 }

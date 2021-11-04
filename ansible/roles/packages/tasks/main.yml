@@ -1,8 +1,0 @@
----
-- name: install aws and other packges
-  apt:
-    state: present
-    update_cache: yes
-    name:
-      - git
-      - awscli

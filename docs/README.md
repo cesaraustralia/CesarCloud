@@ -1,6 +1,6 @@
 ## Documentation of the Cesar Cloud Server Configuration
 
 
-See the link to github pages: ...
+See the documentation here: [https://cesaraustralia.github.io/CesarCloud](https://cesaraustralia.github.io/CesarCloud/)
 
 

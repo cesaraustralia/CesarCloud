@@ -1,0 +1,51 @@
+---
+- name: update the server
+  apt:
+    upgrade: dist
+    update_cache: yes
+    cache_valid_time: 3600
+
+
+- name: install required packges on the server
+  apt:
+    state: present
+    update_cache: yes
+    name:
+      - git
+      - awscli
+      - unattended-upgrades
+
+
+- name: installa docker dependencies
+  apt:
+    state: present
+    update_cache: yes
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - software-properties-common
+      - lsb-release
+- name: add docker GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+- name: add docker to apt repository
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu bionic stable
+    state: present
+- name: install docker, docker-cli, and conteiner.io
+  apt:
+    state: latest
+    update_cache: yes
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+
+- name: make sure that docker was started and enabled
+  service:
+    name: docker
+    state: started
+    enabled: yes
