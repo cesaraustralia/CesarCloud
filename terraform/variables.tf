@@ -48,11 +48,15 @@ variable "dbpass" {
   type = string
   sensitive = true
 }
-variable "rspass" {
+variable "dbname" {
   type = string
   sensitive = true
 }
-variable "dbname" {
+variable "rsuser" {
+  type = string
+  sensitive = true
+}
+variable "rspass" {
   type = string
   sensitive = true
 }
