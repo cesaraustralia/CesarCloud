@@ -43,94 +43,29 @@ resource "aws_instance" "ec2" {
     network_interface_id = aws_network_interface.net_interface.id
   }
 
-  # this section will be replaces with an ansible palybook
-  user_data = <<-EOF
-              #!/bin/bash
-              sudo apt update -y
-              sudo apt install git -y
+  # server configuration with ansible
+  # check if ssh to server works then continue (i.e. server is ready)
+  provisioner "remote-exec" {
+    inline = ["echo 'SSH connection is now ready!'"]
 
-              # installing docker in the instance
-              sudo apt install \
-                apt-transport-https \
-                ca-certificates \
-                curl \
-                gnupg \
-                lsb-release
-              
-              curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+    connection {
+      type        = "ssh"
+      user        = var.remote_user
+      private_key = file(var.ssh_key_path)
+      host        = var.static_ip
+    }
+  }
 
-              echo \
-                "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
-                $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-              
-              sudo apt update -y
-              sudo apt install docker-ce docker-ce-cli containerd.io -y
-              sudo apt install docker.io -y
-              sudo apt install docker-compose -y
-              sudo apt install awscli -y
-              # sudo apt install unattended-upgrades -y
-              # sudo dpkg-reconfigure --priority=low unattended-upgrades
+  # remove the old ssh key from known-hosts to make ansible work
+  provisioner "local-exec" { 
+    command = "ssh-keygen -f '/home/rvalavi/.ssh/known_hosts' -R ${var.static_ip}"
+    on_failure = continue
+  }
 
-              # add docker to user groups
-              sudo groupadd docker
-              sudo usermod -aG docker $USER
-              newgrp docker
-
-              # make shiny server directory and clone the apps
-              sudo -u ubuntu mkdir -p /srv/shiny-server
-              git clone https://${var.git_token}@github.com/cesaraustralia/daragrub.git /srv/shiny-server/Pestimator
-              git clone https://${var.git_token}@github.com/cesaraustralia/daragrub.git /srv/shiny-server/predict-a-pest
-              git clone https://${var.git_token}@github.com/cesaraustralia/CesarDatabase.git /srv/shiny-server/CesarDatabase
-              git clone https://${var.git_token}@github.com/cesaraustralia/ausresistancemap.git /srv/shiny-server/AusResistanceMap
-
-              # clone and build the docker containers
-              sudo -u ubuntu mkdir -p /home/ubuntu/CesarCloud
-              git clone https://${var.git_token}@github.com/cesaraustralia/CesarCloud.git /home/ubuntu/CesarCloud
-              
-              aws ecr get-login-password --region ${var.region} | sudo docker login --username AWS --password-stdin ${aws_ecr_repository.geoshiny.repository_url}
-              cd /home/ubuntu/CesarCloud/docker
-              # modify the docker compose file with terraform variables
-              awk '{sub("dbuser","${var.dbuser}")}1' compose-temp.yml | \
-                awk '{sub("dbpass","${var.dbpass}")}1' | \
-                awk '{sub("dbname","${var.dbname}")}1' | \
-                awk '{sub("shinyimage","${aws_ecr_repository.geoshiny.repository_url}:${var.shiny_tag}")}1' | \
-                awk '{sub("rstudiopass","${var.rspass}")}1' > docker-compose.yml
-              # now run the containers
-              sudo docker-compose -f /home/ubuntu/CesarCloud/docker/docker-compose.yml up -d
-              
-              # sleep to make sure the docker is up and running
-              sleep 120
-
-              # now create the environment file for shiny apps
-              echo -e "POSTGRES_USER=${var.dbuser}" >> .Renviron
-              echo -e "POSTGRES_PASSWORD=${var.dbpass}" >> .Renviron
-              echo -e "POSTGRES_DB=${var.dbname}" >> .Renviron
-              sudo docker cp .Renviron docker_shiny_1:/home/shiny
-              rm .Renviron
-
-
-
-
-              # recover the database backup from our storage
-              sudo -u ubuntu mkdir -p /home/ubuntu/db_backup              
-              cd /home/ubuntu/db_backup
-              aws s3 cp s3://${var.s3_bucket}/database-backups/pg_backup_latest.gz . && \
-              sleep 60
-              sudo gunzip < pg_backup_latest.gz | sudo docker exec -i docker_postgis_1 psql -U ${var.dbuser} -d ${var.dbname}
-              rm /home/ubuntu/db_backup/*
-
-              # create a folder for upload file to db
-              sudo -u ubuntu mkdir -p /home/ubuntu/db_upload
-
-              # set up a cron jobs to backup db every Sunday
-              line='0 3 * * 0 sudo docker exec -t docker_postgis_1 pg_dumpall -c -U ${var.dbuser} | gzip > /home/ubuntu/db_backup/pg_backup_`date +"\%y-\%m-\%d_\%H_\%M_\%S"`.gz'
-              (crontab -u root -l; echo "$line" ) | crontab -u root -
-              line='5 3 * * 0 sudo docker exec -t docker_postgis_1 pg_dumpall -c -U ${var.dbuser} | gzip > /home/ubuntu/db_backup/pg_backup_latest.gz'
-              (crontab -u root -l; echo "$line" ) | crontab -u root -
-              line='10 3 * * 0 aws s3 sync /home/ubuntu/db_backup s3://${var.s3_bucket}/database-backups/ && rm /home/ubuntu/db_backup/*'
-              (crontab -u root -l; echo "$line" ) | crontab -u root -
-
-              EOF
+  # run ansible palybook to configure the server
+  provisioner "local-exec" {
+    command = "ansible-playbook -i ${var.static_ip}, --private-key ${var.ssh_key_path} ../ansible/server-config.yml"
+  }
 
   tags = {
     Name = "cesar-server"

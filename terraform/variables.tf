@@ -34,7 +34,6 @@ variable "zone" {
   type = string
 }
 
-# variables for the docker compose file
 # shiny-spatial docker image tag
 variable "shiny_tag" {
   type = string

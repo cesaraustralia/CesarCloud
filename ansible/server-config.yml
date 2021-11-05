@@ -13,5 +13,4 @@
     - setup_shinyapps
     - setup_containers
     - setup_database
-    # - setup_backups
-
+    - setup_backups

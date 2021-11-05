@@ -10,7 +10,7 @@ services:
      - POSTGRES_DB={{ dbname }}
     volumes:
      - /var/lib/postgresql/data:/var/lib/postgresql/data
-     - /home/ubuntu/db_upload:/home/db_upload
+     - /home/{{ remote_user }}/db_upload:/home/db_upload
   shiny:
     image: "{{ ecr_repo_url }}:{{ shiny_tag }}"
     ports:
@@ -18,12 +18,13 @@ services:
     volumes:
      - /srv/shiny-server:/srv/shiny-server
      - /var/log/shiny-server:/var/log/shiny-server
-     - /home/ubuntu/db_upload:/home/db_upload
+     - /home/{{ remote_user }}/db_upload:/home/db_upload
   rstudio:
     image: rocker/rstudio:latest
     ports:
       - 8787:8787
     environment:
+      - USER={{ rsuser }}
       - PASSWORD={{ rspass }}
     volumes:
       - /srv/shiny-server:/srv/shiny-server

@@ -1,17 +1,19 @@
 ---
 - name: add aws ecr access key to the server
-  ansible.builtin.shell: |
-    aws ecr get-login-password --region {{ region }} | sudo docker login --username AWS --password-stdin {{ ecr_repo_url }}
-
-- name: create the path to make sure containers can run
   become: yes
-  # become_user: "{{ remote_user }}"
   ansible.builtin.shell: |
-    # mkdir -p /var/lib/postgresql/data
-    # mkdir -p /var/log/shiny-server
-    mkdir /home/{{ remote_user }}/docker
-    mkdir /home/{{ remote_user }}/db_upload
-    mkdir /home/{{ remote_user }}/db_backup
+    aws ecr get-login-password --region {{ region }} | docker login --username AWS --password-stdin {{ ecr_repo_url }}
+
+- name: create required directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ remote_user }}"
+    group: "{{ remote_user }}"
+  loop:
+    - /home/{{ remote_user }}/docker
+    - /home/{{ remote_user }}/db_upload
+    - /home/{{ remote_user }}/db_backup
 
 - name: copy docker-compose file to the server (including variables)
   ansible.builtin.template:
