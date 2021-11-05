@@ -1,10 +1,4 @@
 ---
-- name: clone the CesarCloud repo
-  ansible.builtin.git:
-    repo: 'https://{{ git_token }}@github.com/cesaraustralia/CesarCloud.git'
-    dest: /home/{{ remote_user }}/CesarCloud
-    update: yes
-
 - name: clone the CesarDatabase repo
   ansible.builtin.git:
     repo: 'https://{{ git_token }}@github.com/cesaraustralia/CesarDatabase.git'

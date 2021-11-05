@@ -109,6 +109,8 @@ resource "aws_instance" "ec2" {
               rm .Renviron
 
 
+
+
               # recover the database backup from our storage
               sudo -u ubuntu mkdir -p /home/ubuntu/db_backup              
               cd /home/ubuntu/db_backup

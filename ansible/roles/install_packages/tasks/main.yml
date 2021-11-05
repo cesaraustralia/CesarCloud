@@ -35,7 +35,7 @@
   apt_repository:
     repo: deb https://download.docker.com/linux/ubuntu bionic stable
     state: present
-- name: install docker, docker-cli, and conteiner.io
+- name: install docker apps
   apt:
     state: latest
     update_cache: yes
@@ -43,6 +43,7 @@
       - docker-ce
       - docker-ce-cli
       - containerd.io
+      - docker-compose
 
 - name: make sure that docker was started and enabled
   service:

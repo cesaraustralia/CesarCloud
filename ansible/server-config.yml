@@ -1,6 +1,6 @@
 # yaml file for setting up the server apps and tasks
 ---
-- name: Install server packages
+- name: Configure the server
   hosts: all
   remote_user: "{{ remote_user }}"
   become: yes
@@ -10,7 +10,8 @@
   # define the roles/takse for ansible to run
   roles: 
     - install_packages
-    - clone_repos
-    # - setup_database
-    # - cron_jobs
+    - setup_shinyapps
+    - setup_containers
+    - setup_database
+    # - setup_backups
 

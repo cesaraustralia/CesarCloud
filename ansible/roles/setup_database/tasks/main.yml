@@ -1,0 +1,21 @@
+---
+- name: generate environment files for database connection
+  become: yes
+  ansible.builtin.shell: |
+    cd /home/{{ remote_user }}
+    echo -e "POSTGRES_USER={{ dbuser }}" >> .Renviron
+    echo -e "POSTGRES_PASSWORD={{ dbpass }}" >> .Renviron
+    echo -e "POSTGRES_DB={{ dbname }}" >> .Renviron
+    docker cp .Renviron docker_shiny_1:/home/shiny
+    rm .Renviron
+
+- name: recover the database backup from storage
+  become: yes
+  ansible.builtin.shell: |
+    aws s3 cp s3://{{ s3_bucket }}/database-backups/pg_backup_latest.gz /home/{{ remote_user }}/db_backup
+
+- name: recover the database backup from storage
+  become: yes
+  ansible.builtin.shell: |
+    gunzip < pg_backup_latest.gz | docker exec -i docker_postgis_1 psql -U {{ dbuser }} -d {{ dbname }}
+    # rm /home/{{ remote_user }}/db_backup/*
