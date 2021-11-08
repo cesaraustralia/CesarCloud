@@ -22,3 +22,12 @@
     repo: 'https://github.com/cesaraustralia/daragrub.git'
     dest: /srv/shiny-server/predict-a-pest
     update: yes
+
+- name: change shiny server file permissions (github action req)
+  become: yes
+  file:
+    path: /srv
+    state: directory
+    recurse: yes
+    owner: "{{ remote_user }}"
+    group: "{{ remote_user }}"
