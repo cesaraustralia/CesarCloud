@@ -21,8 +21,16 @@
   ansible.builtin.cron:
     name: sync backup with s3
     weekday: "0"
-    minute: "15"
+    minute: "10"
     hour: "3"
     user: root
-    job: 'aws s3 sync /home/{{ remote_user }}/db_backup/ s3://{{ s3_bucket }}/database-backups/ && sudo rm /home/{{ remote_user }}/db_backup/*'
+    job: 'aws s3 sync /home/{{ remote_user }}/db_backup/ s3://{{ s3_bucket }}/database-backups/'
 
+- name: clear backups from the server
+  ansible.builtin.cron:
+    name: clear backups
+    weekday: "0"
+    minute: "30"
+    hour: "3"
+    user: root
+    job: 'sudo rm /home/{{ remote_user }}/db_backup/*'
