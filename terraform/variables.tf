@@ -51,6 +51,10 @@ variable "dbname" {
   type = string
   sensitive = true
 }
+variable "dbhost" {
+  type = string
+  sensitive = true
+}
 variable "rsuser" {
   type = string
   sensitive = true

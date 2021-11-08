@@ -11,9 +11,12 @@ resource "local_file" "tf_ansible_vars_file" {
     dbuser: ${var.dbuser}
     dbpass: ${var.dbpass}
     dbname: ${var.dbname}
+    dbhost: ${var.dbhost}
+    rsuser: ${var.rsuser}
     rspass: ${var.rspass}
     region: ${var.region}
 
     DOC
   filename = "../ansible/ansible_vars_file.yml"
 }
+
