@@ -1,21 +1,50 @@
 ---
-- name: generate environment files for database connection
-  become: yes
-  ansible.builtin.shell: |
-    cd /home/{{ remote_user }}
-    echo -e "POSTGRES_USER={{ dbuser }}" >> .Renviron
-    echo -e "POSTGRES_PASSWORD={{ dbpass }}" >> .Renviron
-    echo -e "POSTGRES_DB={{ dbname }}" >> .Renviron
-    docker cp .Renviron docker_shiny_1:/home/shiny
-    rm .Renviron
-
-- name: recover the database backup from storage
+- name: import the database backup from s3
   become: yes
   ansible.builtin.shell: |
     aws s3 cp s3://{{ s3_bucket }}/database-backups/pg_backup_latest.gz /home/{{ remote_user }}/db_backup
+  async: 2100
+  poll: 0
+  register: import_db
 
-- name: recover the database backup from storage
+- name: copy env files for database connection
+  ansible.builtin.template:
+    src: ".Renviron"
+    dest: /home/{{ remote_user }}/docker
+    owner: "{{ remote_user }}"
+    group: "{{ remote_user }}"
+
+- name: copy env to the container
   become: yes
-  ansible.builtin.shell: |
-    gunzip < pg_backup_latest.gz | docker exec -t docker_postgis_1 psql -U {{ dbuser }} -d {{ dbname }}
-    # rm /home/{{ remote_user }}/db_backup/*
+  ansible.builtin.shell: | 
+    docker cp /home/{{ remote_user }}/docker/.Renviron docker_shiny_1:/home/shiny
+    rm /home/{{ remote_user }}/docker/.Renviron
+
+- name: check if database import is complete
+  async_status:
+    jid: "{{ import_db.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  delay: 10
+  retries: 300
+
+- name: recover the database backup
+  become: yes
+  ansible.builtin.shell: | 
+    gunzip < /home/{{ remote_user }}/db_backup/pg_backup_latest.gz | docker exec -i docker_postgis_1 psql -U {{ dbuser }} -d {{ dbname }}
+  async: 2100
+  poll: 0
+  register: recover_db
+
+- name: check if database recovery is complete
+  async_status:
+    jid: "{{ recover_db.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  delay: 10
+  retries: 300
+
+- name: remove database backup form server
+  become: yes
+  ansible.builtin.shell: | 
+    rm /home/{{ remote_user }}/db_backup/*
