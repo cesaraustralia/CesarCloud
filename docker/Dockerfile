@@ -1,4 +1,4 @@
-FROM rocker/shiny:latest
+FROM rocker/shiny:4.1.2
 LABEL Maintainer="rvalavi@cesaraustralia.com"
 
 # install libraries of general use

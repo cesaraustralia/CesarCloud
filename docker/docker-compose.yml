@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   postgis:
-    image: postgis/postgis:latest
+    image: postgis/postgis:14-3.1
     ports:
       - 5432:5432
     environment:
@@ -20,7 +20,7 @@ services:
      - /var/log/shiny-server:/var/log/shiny-server
      - /home/{{ remote_user }}/db_upload:/home/db_upload
   rstudio:
-    image: rocker/rstudio:latest
+    image: rocker/tidyverse:4.1.2
     ports:
       - 8787:8787
     environment:

@@ -20,7 +20,7 @@ provider "aws" {
 
 
 # add a Ubuntu 20.4 instance on a EC2
-resource "aws_instance" "ec2" {
+resource "aws_instance" "webserver" {
   ami               = "ami-0567f647e75c7bc05"
   instance_type     = "t2.medium"
   availability_zone = var.zone
