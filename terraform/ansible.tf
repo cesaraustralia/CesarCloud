@@ -4,6 +4,7 @@ resource "local_file" "tf_ansible_vars_file" {
     # Ansible vars_file containing variable values from Terraform.
 
     remote_user: ${var.remote_user}
+    ec2_dns: ${var.ec2_dns}
     git_token: ${var.git_token}
     s3_bucket: ${var.s3_bucket}
     ecr_repo_url: ${aws_ecr_repository.geoshiny.repository_url}

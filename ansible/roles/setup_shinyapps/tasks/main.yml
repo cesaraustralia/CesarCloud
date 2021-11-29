@@ -23,6 +23,11 @@
     dest: /srv/shiny-server/predict-a-pest
     update: yes
 
+- name: clone the LeafMinerShinyObs repo
+  ansible.builtin.git:
+    repo: 'https://{{ git_token }}@github.com/cesaraustralia/LeafMinerShinyObs.git'
+    dest: /srv/shiny-server/LeafMinerShinyObs
+    update: yes
 
 - name: change shiny server file permissions (github action req)
   become: yes

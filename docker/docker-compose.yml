@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   postgis:
-    image: postgis/postgis:14-3.1
+    image: postgis/postgis:latest
     ports:
       - 5432:5432
     environment:
@@ -14,7 +14,7 @@ services:
   shiny:
     image: "{{ ecr_repo_url }}:{{ shiny_tag }}"
     ports:
-     - 80:3838
+     - 3838:3838
     volumes:
      - /srv/shiny-server:/srv/shiny-server
      - /var/log/shiny-server:/var/log/shiny-server

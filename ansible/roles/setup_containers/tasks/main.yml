@@ -12,8 +12,15 @@
     group: "{{ remote_user }}"
   loop:
     - /home/{{ remote_user }}/docker
-    - /home/{{ remote_user }}/db_upload
     - /home/{{ remote_user }}/db_backup
+    - /home/{{ remote_user }}/.db_upload # docker volume
+
+- name: add docker to user group
+  ansible.builtin.user: 
+    name: docker
+    shell: /bin/bash
+    groups: "{{ remote_user }}"
+    append: yes
 
 - name: copy docker-compose file to the server (including variables)
   ansible.builtin.template:
@@ -27,3 +34,15 @@
     project_src: /home/{{ remote_user }}/docker
     files:
       - docker-compose.yml
+
+
+- name: copy caddyfile files for https support
+  ansible.builtin.template:
+    src: "Caddyfile"
+    dest: /etc/caddy
+
+- name: restart caddy service is enabled
+  service:
+    name: caddy
+    state: restarted
+    enabled: yes
