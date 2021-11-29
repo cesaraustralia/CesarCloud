@@ -10,15 +10,16 @@ services:
      - POSTGRES_DB={{ dbname }}
     volumes:
      - /var/lib/postgresql/data:/var/lib/postgresql/data
-     - /home/{{ remote_user }}/db_upload:/home/db_upload
+     - /home/{{ remote_user }}/.db_upload:/home/db_upload # connection to database shiny app
   shiny:
+    user: "${UID}:${GID}"
     image: "{{ ecr_repo_url }}:{{ shiny_tag }}"
     ports:
      - 3838:3838
     volumes:
      - /srv/shiny-server:/srv/shiny-server
      - /var/log/shiny-server:/var/log/shiny-server
-     - /home/{{ remote_user }}/db_upload:/home/db_upload
+     - /home/{{ remote_user }}/.db_upload:/home/shiny/.db_upload # connection to database shiny app
   rstudio:
     image: rocker/tidyverse:4.1.2
     ports:
