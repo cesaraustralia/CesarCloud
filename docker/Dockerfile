@@ -28,7 +28,8 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
     libudunits2-dev \
     libhdf5-dev \
     libnetcdf-dev \
-    netcdf-bin
+    netcdf-bin \
+    libjq-dev # for googleway
 
 ## update system libraries
 RUN apt-get update && \
@@ -44,6 +45,7 @@ RUN Rscript -e 'install.packages(c("shiny","shinydashboard","shinythemes","shiny
 RUN Rscript -e 'install.packages(c("tidyverse","data.table","viridis","lubridate","plotly","DT","reshape2","ggmap","ggtext","ggrepel","doParallel","rvest","cowplot"))'
 RUN Rscript -e 'install.packages(c("rgdal","rgeos","ncdf4","sf","terra","tmap","maptools","leaflet"),dependencies=TRUE)'
 RUN Rscript -e 'install.packages(c("DBI", "RPostgres", "pool", "dbplyr"), dependencies=TRUE)'
+RUN Rscript -e 'install.packages(c("googleway"), dependencies=TRUE)'
 # expose port
 EXPOSE 3838
 

@@ -2,3 +2,4 @@ POSTGRES_HOST={{ dbhost }}
 POSTGRES_USER={{ dbuser }}
 POSTGRES_PASSWORD={{ dbpass }}
 POSTGRES_DB={{ dbname }}
+GOOGLE_API_KEY={{ google_api }}

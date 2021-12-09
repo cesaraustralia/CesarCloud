@@ -22,13 +22,13 @@ provider "aws" {
 # add a Ubuntu 20.4 instance on a EC2
 resource "aws_instance" "webserver" {
   ami               = "ami-0567f647e75c7bc05"
-  instance_type     = "t2.medium"
+  instance_type     = "t2.medium" # maybe change to t4.medium?
   availability_zone = var.zone
   key_name          = var.ssh_key
 
   # setup the EBS volume
   root_block_device {
-    delete_on_termination = false
+    delete_on_termination = false # can be true; immutable infrastructure
     volume_size = 50
   }
 

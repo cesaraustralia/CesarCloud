@@ -16,6 +16,7 @@ resource "local_file" "tf_ansible_vars_file" {
     rsuser: ${var.rsuser}
     rspass: ${var.rspass}
     region: ${var.region}
+    google_api: ${var.google_api}
 
     DOC
   filename = "../ansible/ansible_vars_file.yml"

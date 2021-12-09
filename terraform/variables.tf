@@ -67,6 +67,10 @@ variable "rspass" {
   type = string
   sensitive = true
 }
+variable "google_api" {
+  type = string
+  sensitive = true
+}
 
 # s3 bucket name
 variable "s3_bucket" {
