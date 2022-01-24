@@ -2,6 +2,7 @@ version: "3.3"
 services:
   postgis:
     image: postgis/postgis:latest # other versions don't work!
+    container_name: postgis
     ports:
       - 5432:5432
     environment:
@@ -14,6 +15,7 @@ services:
   shiny:
     user: "${UID}:${GID}"
     image: "{{ ecr_repo_url }}:{{ shiny_tag }}"
+    container_name: shiny
     ports:
      - 3838:3838
     volumes:
@@ -22,6 +24,7 @@ services:
      - /home/{{ remote_user }}/.db_upload:/home/shiny/.db_upload # connection to database shiny app
   rstudio:
     image: rocker/tidyverse:4.1.2
+    container_name: rstudio
     ports:
       - 8787:8787
     environment:
