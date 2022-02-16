@@ -41,7 +41,7 @@
     src: "Caddyfile"
     dest: /etc/caddy
 
-- name: restart caddy service is enabled
+- name: restart caddy service to enable it
   service:
     name: caddy
     state: restarted

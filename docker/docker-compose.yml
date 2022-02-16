@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   postgis:
-    image: postgis/postgis:latest # other versions don't work!
+    image: postgis/postgis:latest # other tags won't work! possibly because of libpq-dev and gcc requirement
     container_name: postgis
     ports:
       - 5432:5432
@@ -12,6 +12,17 @@ services:
     volumes:
      - /var/lib/postgresql/data:/var/lib/postgresql/data
      - /home/{{ remote_user }}/.db_upload:/home/db_upload # connection to database shiny app
+    networks:
+      apinetwork:
+        ipv4_address: 172.20.0.5 
+  api:
+    build: ../DatabaseAPI/ # location on remote server
+    container_name: api
+    ports:
+     - 5000:5000
+    networks:
+      apinetwork:
+        ipv4_address: 172.20.0.2
   shiny:
     user: "${UID}:${GID}"
     image: "{{ ecr_repo_url }}:{{ shiny_tag }}"
@@ -22,6 +33,9 @@ services:
      - /srv/shiny-server:/srv/shiny-server
      - /var/log/shiny-server:/var/log/shiny-server
      - /home/{{ remote_user }}/.db_upload:/home/shiny/.db_upload # connection to database shiny app
+    # networks:
+    #   apinetwork:
+    #     ipv4_address: 172.20.0.3 # update CesarDatabase app to use the docker db ip: 172.20.0.5 [terrafom variable]
   rstudio:
     image: rocker/tidyverse:4.1.2
     container_name: rstudio
@@ -33,3 +47,10 @@ services:
     volumes:
       - /srv/shiny-server:/srv/shiny-server
       - /var/log/shiny-server:/var/log/shiny-server
+
+networks:
+  apinetwork:
+    driver: bridge
+    ipam:
+      config:
+       - subnet: 172.20.0.0/16

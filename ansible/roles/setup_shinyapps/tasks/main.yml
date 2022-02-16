@@ -1,4 +1,18 @@
 ---
+- name: clone the DatabaseAPI repo
+  ansible.builtin.git:
+    repo: 'https://{{ git_token }}@github.com/rvalavi/DatabaseAPI.git' # update repo ower after transfer to cesaraustralia
+    dest: /home/{{ remote_user }}/DatabaseAPI
+    update: yes
+
+- name: update app.py files with database password for the api
+  replace:
+    path: /home/{{ remote_user }}/DatabaseAPI/app.py
+    regexp: "dbpassword"
+    replace: "{{ dbpass }}"
+    owner: "{{ remote_user }}"
+    group: "{{ remote_user }}"
+
 - name: clone the CesarDatabase repo
   ansible.builtin.git:
     repo: 'https://{{ git_token }}@github.com/cesaraustralia/CesarDatabase.git'
@@ -27,6 +41,12 @@
   ansible.builtin.git:
     repo: 'https://{{ git_token }}@github.com/cesaraustralia/LeafMinerShinyObs.git'
     dest: /srv/shiny-server/LeafMinerShinyObs
+    update: yes
+
+- name: clone the SugarPestsSDM repo
+  ansible.builtin.git:
+    repo: 'https://github.com/cesaraustralia/SugarPestsSDM.git'
+    dest: /srv/shiny-server/SugarPestsSDM
     update: yes
 
 - name: change shiny server file permissions (github action req)

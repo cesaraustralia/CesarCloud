@@ -6,7 +6,7 @@
     minute: "0"
     hour: "3"
     user: root
-    job: 'docker exec -t docker_postgis_1 pg_dumpall -c -U {{ dbuser }} | gzip > /home/{{ remote_user }}/db_backup/pg_backup_`date +"\%y-\%m-\%d_\%H_\%M_\%S"`.gz'
+    job: 'docker exec -t postgis pg_dumpall -c -U {{ dbuser }} | gzip > /home/{{ remote_user }}/db_backup/pg_backup_`date +"\%y-\%m-\%d_\%H_\%M_\%S"`.gz'
 
 - name: create a cron job for db backup
   ansible.builtin.cron:
@@ -15,7 +15,7 @@
     minute: "5"
     hour: "3"
     user: root
-    job: 'docker exec -t docker_postgis_1 pg_dumpall -c -U {{ dbuser }} | gzip > /home/{{ remote_user }}/db_backup/pg_backup_latest.gz'
+    job: 'docker exec -t postgis pg_dumpall -c -U {{ dbuser }} | gzip > /home/{{ remote_user }}/db_backup/pg_backup_latest.gz'
 
 - name: create a cron job sending backup to s3
   ansible.builtin.cron:

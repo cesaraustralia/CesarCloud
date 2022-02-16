@@ -16,6 +16,8 @@ terraform {
 # region code for Sydney Australia
 provider "aws" {
   region = var.region
+  # profile = var.profile
+  # shared_credentials_file = "~/.aws/credentials"
 }
 
 

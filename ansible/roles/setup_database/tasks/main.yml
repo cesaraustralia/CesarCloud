@@ -17,7 +17,7 @@
 - name: copy env to the container
   become: yes
   ansible.builtin.shell: | 
-    docker cp /home/{{ remote_user }}/docker/.Renviron docker_shiny_1:/home/shiny
+    docker cp /home/{{ remote_user }}/docker/.Renviron shiny:/home/shiny
     rm /home/{{ remote_user }}/docker/.Renviron
 
 - name: check if database import is complete
@@ -31,7 +31,7 @@
 - name: recover the database backup
   become: yes
   ansible.builtin.shell: | 
-    gunzip < /home/{{ remote_user }}/db_backup/pg_backup_latest.gz | docker exec -i docker_postgis_1 psql -U {{ dbuser }} -d {{ dbname }}
+    gunzip < /home/{{ remote_user }}/db_backup/pg_backup_latest.gz | docker exec -i postgis psql -U {{ dbuser }} -d {{ dbname }}
   async: 2100
   poll: 0
   register: recover_db
