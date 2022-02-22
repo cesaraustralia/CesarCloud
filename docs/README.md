@@ -27,4 +27,6 @@ following sections.
 
 ### PostgreSQL database
 
+### Database API
+
 ## GitHub actions
