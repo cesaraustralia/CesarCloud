@@ -4,8 +4,7 @@ author: "Roozbeh Valavi"
 email: "rvalavi@cesaraustralia.com"
 date: "`r Sys.Date()`"
 output: 
-  rmarkdown::html_document:
-    fig_caption: yes
+  md_document
 ---
 
 ```{r setup, include=FALSE}

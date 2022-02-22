@@ -7,7 +7,7 @@
   vars_files:
     - ansible_vars_file.yml
 
-  # define the roles/takse for ansible to run
+  # define the roles/tasks for ansible to run
   roles: 
     - install_packages
     - setup_shinyapps
