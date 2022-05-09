@@ -20,11 +20,7 @@ following sections.
 ## Terraform configuration
 
 ## Ansible configuration
-Ansible is used for configuring the Linux server. It's responsible for:
-- installing the Linux libraries and apps
-- pulling the GitHub repos for the apps
-- setting up the docker containers for the shiny, Postgres, and API
-- creating auto-backup for the database
+Ansible is used for configuring the Linux server. It's responsible for: installing the Linux libraries and apps; pulling the GitHub repos for the apps; setting up the docker containers for the shiny, Postgres, and API; and creating auto-backup for the database.
 
 The abovementioned tasks are defined by a set of *roles* that are run in sequence. It is important to know which operation to run in order to get the next step successful. The roles are defined (in order) as:
 - setup_database
