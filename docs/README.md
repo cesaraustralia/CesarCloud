@@ -37,6 +37,8 @@ The abovementioned tasks are defined by a set of *roles* that are run in sequenc
 
 ### Database API
 
+To set up all containers and their networks, connections, and volumes we used `docker-compose` file. The docker-compose is simple enough to get everything up and running, but in a more complex setup `Kubernetes` container orchestration might be a better choice.
+
 ## GitHub actions
 The GitHub action is used to automatically deploy new/updated apps to the server. This is done through SSH and rsync tools when the GitHub action is defined for a repository. The action is triggered by a push/pull-request to the main/master branch. The same thing can be done manually: 1) SSH into the main server 2) go to the `/srv/shiny-server/` 3) pull the repo of the app
 
