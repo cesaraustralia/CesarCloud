@@ -7,7 +7,12 @@ following sections.
 
 <img src="AWS_architecture.jpg" width="700" style="display: block; margin: auto;" />
 
-## Software and resources
+
+## AWS services
+
+
+
+## Software and learning resources
 
 -   Terraform resource:
 

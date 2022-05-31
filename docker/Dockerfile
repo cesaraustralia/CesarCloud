@@ -1,4 +1,4 @@
-FROM rocker/shiny:4.1.2
+FROM rocker/shiny:4.2.0
 LABEL Maintainer="rvalavi@cesaraustralia.com"
 
 # install libraries of general use
@@ -17,18 +17,24 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
     libgit2-dev \
     git
 
+# add ogc/ubuntugis repository
+RUN apt-get -y install software-properties-common
+RUN add-apt-repository ppa:ubuntugis/ppa && apt-get update
+
 # install goespatial libraries
 RUN apt-get update -qq && apt-get -y --no-install-recommends install \
+    proj-bin \
+    libproj-dev \
+    gdal-bin \
     libgdal-dev \
     libgeos-dev \
     libgeotiff-dev \
     libjpeg-dev \
     libicu-dev \
-    libproj-dev \
     libudunits2-dev \
     libhdf5-dev \
-    libnetcdf-dev \
     netcdf-bin \
+    libnetcdf-dev \
     libjq-dev # for googleway
 
 ## update system libraries
@@ -42,12 +48,10 @@ RUN apt-get update && \
 #RUN Rscript -e 'renv::consent(provided = TRUE)'
 #RUN Rscript -e 'renv::restore()'
 RUN Rscript -e 'install.packages(c("shiny","shinydashboard","shinythemes","shinyWidgets","shinyjs","shinyauthr","tableHTML","shinycssloaders","leafsync"))'
-RUN Rscript -e 'install.packages(c("tidyverse","data.table","viridis","lubridate","plotly","DT","reshape2","ggmap","ggtext","ggrepel","doParallel","rvest","cowplot"))'
-RUN Rscript -e 'install.packages(c("rgdal","rgeos","ncdf4","sf","terra","tmap","maptools","leaflet"),dependencies=TRUE)'
+RUN Rscript -e 'install.packages(c("devtools","tidyverse","data.table","viridis","lubridate","plotly","DT","reshape2","ggmap","ggtext","ggrepel","doParallel","rvest","cowplot"))'
+RUN Rscript -e 'install.packages(c("rgdal","rgeos","ncdf4","sf","tmap","maptools","leaflet","rasterVis"),dependencies=TRUE)'
 RUN Rscript -e 'install.packages(c("DBI", "RPostgres", "pool", "dbplyr"), dependencies=TRUE)'
+RUN Rscript -e 'devtools::install_github("rspatial/terra")'
 # RUN Rscript -e 'install.packages(c("googleway"), dependencies=TRUE)'
 # expose port
 EXPOSE 3838
-
-# run app on container start
-#CMD ["R", "-e", "shiny::runApp('/srv/shiny-server', host = '0.0.0.0', port = 3838)"]
