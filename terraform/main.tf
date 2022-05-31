@@ -30,7 +30,7 @@ resource "aws_instance" "webserver" {
 
   # setup the EBS volume
   root_block_device {
-    delete_on_termination = false # can be true; immutable infrastructure
+    delete_on_termination = true # if false the hard drive wont be deleted, but it cost unattached
     volume_size = 50
   }
 
