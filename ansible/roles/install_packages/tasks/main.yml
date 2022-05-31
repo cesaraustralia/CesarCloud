@@ -2,14 +2,14 @@
 - name: update the server
   apt:
     upgrade: dist
-    update_cache: yes
+    # update_cache: yes ## not supported anymore
     cache_valid_time: 3600
 
 
 - name: install required packges on the server
   apt:
     state: present
-    update_cache: yes
+    # update_cache: yes
     name:
       - git
       - awscli
@@ -19,7 +19,7 @@
 - name: installa docker dependencies
   apt:
     state: present
-    update_cache: yes
+    # update_cache: yes
     name:
       - apt-transport-https
       - ca-certificates
@@ -38,7 +38,7 @@
 - name: install docker apps
   apt:
     state: latest
-    update_cache: yes
+    # update_cache: yes
     name:
       - docker-ce
       - docker-ce-cli
@@ -54,7 +54,7 @@
 - name: install caddy requirements
   apt:
     state: present
-    update_cache: yes
+    # update_cache: yes
     name:
       - debian-keyring
       - debian-archive-keyring
@@ -63,8 +63,8 @@
 - name: install caddy for tsl/ssl certificate (activating HTTPS)
   become: yes
   ansible.builtin.shell: |
-    curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo tee /etc/apt/trusted.gpg.d/caddy-stable.asc
+    curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
     curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/caddy-stable.list
     apt update
-    apt install caddy -y
+    apt -y install caddy
     

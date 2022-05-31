@@ -17,15 +17,9 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
     libgit2-dev \
     git
 
-# add ogc/ubuntugis repository
-RUN apt-get -y install software-properties-common
-RUN add-apt-repository ppa:ubuntugis/ppa && apt-get update
-
 # install goespatial libraries
 RUN apt-get update -qq && apt-get -y --no-install-recommends install \
-    proj-bin \
     libproj-dev \
-    gdal-bin \
     libgdal-dev \
     libgeos-dev \
     libgeotiff-dev \
@@ -49,7 +43,7 @@ RUN apt-get update && \
 #RUN Rscript -e 'renv::restore()'
 RUN Rscript -e 'install.packages(c("shiny","shinydashboard","shinythemes","shinyWidgets","shinyjs","shinyauthr","tableHTML","shinycssloaders","leafsync"))'
 RUN Rscript -e 'install.packages(c("devtools","tidyverse","data.table","viridis","lubridate","plotly","DT","reshape2","ggmap","ggtext","ggrepel","doParallel","rvest","cowplot"))'
-RUN Rscript -e 'install.packages(c("rgdal","rgeos","ncdf4","sf","tmap","maptools","leaflet","rasterVis"),dependencies=TRUE)'
+RUN Rscript -e 'install.packages(c("rgdal","rgeos","ncdf4","sf","raster","tmap","maptools","leaflet","rasterVis"),dependencies=TRUE)'
 RUN Rscript -e 'install.packages(c("DBI", "RPostgres", "pool", "dbplyr"), dependencies=TRUE)'
 RUN Rscript -e 'devtools::install_github("rspatial/terra")'
 # RUN Rscript -e 'install.packages(c("googleway"), dependencies=TRUE)'

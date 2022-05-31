@@ -73,4 +73,3 @@ resource "aws_instance" "webserver" {
     Name = "cesar-server"
   }
 }
-
