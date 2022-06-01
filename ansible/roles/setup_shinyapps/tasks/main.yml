@@ -26,11 +26,11 @@
     update: yes
 
 # this should be removed after finishing the project
-- name: clone the pestimator repo
-  ansible.builtin.git:
-    repo: 'https://github.com/cesaraustralia/daragrub.git'
-    dest: /srv/shiny-server/Pestimator
-    update: yes
+# - name: clone the pestimator repo
+#   ansible.builtin.git:
+#     repo: 'https://github.com/cesaraustralia/daragrub.git'
+#     dest: /srv/shiny-server/Pestimator
+#     update: yes
 
 - name: clone the pestimator repo into predict-a-pest
   ansible.builtin.git:
@@ -48,6 +48,12 @@
   ansible.builtin.git:
     repo: 'https://github.com/cesaraustralia/SugarPestsSDM.git'
     dest: /srv/shiny-server/SugarPestsSDM
+    update: yes
+
+- name: clone the resistance_map repo
+  ansible.builtin.git:
+    repo: 'https://github.com/cesaraustralia/resistance_map.git'
+    dest: /srv/shiny-server/resistance_map
     update: yes
 
 - name: clone the WindDispersalForecastTool repo
